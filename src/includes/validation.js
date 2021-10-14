@@ -35,7 +35,7 @@ export default {
     configure({
       generateMessage: (context) => {
         const messages = {
-          required: `The field ${context.field} required.`,
+          required: `The field ${context.field} is required.`,
           min: `The field ${context.field} is too short.`,
           max: `The field ${context.field} is too long.`,
           alpha_spaces: `The field ${context.field} may only contain alphabet character.`,

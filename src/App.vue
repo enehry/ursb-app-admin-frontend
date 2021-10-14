@@ -7,6 +7,12 @@
     :width="500"
     animation-name="v-fade-top"
   />
+  <notifications
+    group="admin"
+    position="top right"
+    :duration="3000"
+    animation-name="v-fade-top"
+  />
   <router-view></router-view>
 </template>
 <script>

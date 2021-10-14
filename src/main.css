@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.router-link-exact-active.menuItem-active-link {
+  @apply text-green-600 font-bold;
+}
+
+@layer base {
+  :root {
+    --bg-primary: 255, 255, 255;
+    --bg-secondary: 52,211,153;
+    --bg-tertiary: 5,150,105;
+
+    --text-primary: 107,114,128;
+    --text-secondary: 55,65,81;
+    --text-tertiary: 17,24,39;
+  }
+}
