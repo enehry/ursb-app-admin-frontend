@@ -1,124 +1,130 @@
 <template>
-  <!-- mobile menu bar -->
-
   <div
     class="
-      bg-green-600
-      text-gray-100
-      flex
-      justify-between
-      content-center
-      items-center
-      md:hidden
-    "
-  >
-    <!-- logo -->
-    <a href="#" class="block p-4 text-white font-bold">URSB APP</a>
-
-    <!-- mobile menu button -->
-    <button
-      @click.prevent="toggle"
-      class="mobile-menu-button h-8 w-8 focus:outline-none mr-2"
-    >
-      <menu-alt3-Icon
-        class="text-white hover:text-gray-700 focus:text-gray-700"
-      ></menu-alt3-Icon>
-    </button>
-  </div>
-
-  <!-- sidebar -->
-  <div
-    :class="{ '-translate-x-full': isToggle }"
-    class="
-      h-screen
-      sticky
-      top-0
-      shadow-md
-      sidebar
+      flex flex-col
+      w-full
+      md:w-64
+      text-gray-700
       bg-white
-      text-gray-800
-      w-64
-      space-y-6
-      inset-y-0
-      pt-4
-      left-0
-      transform
-      md:translate-x-0
-      transition
-      duration-200
-      ease-in-out
+      dark-mode:text-gray-200 dark-mode:bg-gray-800
+      flex-shrink-0
+      md:h-screen md:sticky md:top-0
     "
   >
-    <!-- logo -->
-    <div class="mx-7 block">
-      <div
-        class="
-          mb-2
-          mt-5
-          rounded-full
-          w-16
-          h-16
-          ring ring-green-600 ring-offset-base-100 ring-offset-2
-        "
-      >
-        <img
-          class="object-cover rounded-full w-full h-full"
-          :src="`http://127.0.0.1:8000${this.userData.avatar}`"
-        />
-      </div>
-      <h3 class="text-md font-bold">{{ fullName }}</h3>
-      <h6 class="text-xs">{{ email }}</h6>
-      <h6 class="text-xs">{{ position }}</h6>
-      <h3 class="text-md mt-4 font-bold">Menu</h3>
-    </div>
-    <hr class="border-2" />
-    <!-- nav -->
-    <nav class="px-2">
-      <router-link
-        v-for="menu in menus"
-        :key="menu.routeName"
-        :to="{ name: `${menu.routeName}` }"
+    <div
+      class="flex-shrink-0 px-8 py-4 flex flex-row items-center justify-between"
+    >
+      <a
         href="#"
         class="
-          menuItem-active-link
-          block
-          py-2.5
-          px-4
-          rounded
-          transition
-          duration-200
-          text-sm
-          hover:bg-green-600 hover:text-white
+          text-lg
+          font-semibold
+          tracking-widest
+          text-gray-900
+          uppercase
+          rounded-lg
+          dark-mode:text-white
+          focus:outline-none focus:shadow-outline
         "
+        >URSB App</a
       >
-        {{ menu.menuName }}
-      </router-link>
+      <button
+        class="md:hidden rounded-lg focus:outline-none focus:shadow-outline"
+        @click="toggle"
+      >
+        <svg
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          class="w-6 h-6 text-gray-600"
+        >
+          <path
+            v-show="!open"
+            fill-rule="evenodd"
+            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
+            clip-rule="evenodd"
+          ></path>
+          <path
+            v-show="open"
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </button>
+    </div>
+    <nav
+      :class="{ block: open, hidden: !open }"
+      class="flex-grow md:block px-4 pb-4 md:pb-0 md:overflow-y-auto"
+    >
+      <!-- logo -->
+      <div class="mx-7 block">
+        <div
+          class="
+            mb-2
+            mt-5
+            rounded-full
+            w-16
+            h-16
+            ring ring-green-600 ring-offset-base-100 ring-offset-2
+          "
+        >
+          <img
+            class="object-cover rounded-full w-full h-full"
+            :src="`http://127.0.0.1:8000${this.userData.avatar}`"
+          />
+        </div>
+        <h3 class="text-md font-bold">{{ fullName }}</h3>
+        <h6 class="text-xs">{{ email }}</h6>
+        <h6 class="text-xs">{{ position }}</h6>
+        <h3 class="text-md mt-4 font-bold">Menu</h3>
+      </div>
+      <hr class="border-2" />
+      <!-- nav -->
+      <div class="px-2">
+        <router-link
+          v-for="menu in menus"
+          :key="menu.routeName"
+          :to="{ name: `${menu.routeName}` }"
+          href="#"
+          class="
+            menuItem-active-link
+            block
+            py-2.5
+            px-4
+            rounded
+            transition
+            duration-200
+            text-sm
+            hover:bg-green-600 hover:text-white
+          "
+        >
+          {{ menu.menuName }}
+        </router-link>
+      </div>
     </nav>
   </div>
 </template>
 
 <script>
-import { MenuAlt3Icon } from "@heroicons/vue/outline";
+// import { MenuAlt3Icon } from "@heroicons/vue/outline";
 import { mapGetters } from "vuex";
 import menus from "@/menus.js";
 
 export default {
   data() {
     return {
-      isToggle: true,
+      open: false,
       menus,
     };
   },
-  components: {
-    MenuAlt3Icon,
-  },
+  components: {},
   computed: {
     ...mapGetters(["userData", "fullName", "email", "position"]),
   },
   methods: {
     toggle() {
-      this.isToggle = !this.isToggle;
-      console.log(this.isToggle);
+      this.open = !this.open;
+      console.log(this.open);
     },
   },
 };

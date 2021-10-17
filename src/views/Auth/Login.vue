@@ -33,8 +33,8 @@
         <div class="w-full md:w-1/2 p-10 md:p-24">
           <vee-form :validation-schema="loginSchema" @submit="submitLogin">
             <div class="mb-10">
-              <h1 class="font-bold text-3xl text-gray-600">Login</h1>
-              <p>Sign in admin to continue</p>
+              <h1 class="font-bold text-2xl text-gray-600">Login</h1>
+              <p class="text-sm">Sign in admin to continue</p>
             </div>
             <div>
               <div class="flex -mx-3">
@@ -61,6 +61,7 @@
                         type="email"
                         name="email"
                         class="
+                          text-gray-600 text-sm
                           w-full
                           pl-10
                           pr-3
@@ -69,7 +70,6 @@
                           rounded-lg
                           border-2 border-gray-200
                           outline-none
-                          focus:border-green-500
                         "
                         placeholder="john@example.com"
                       />
@@ -88,6 +88,7 @@
                     <div class="flex">
                       <div
                         class="
+                          text-sm
                           w-10
                           z-10
                           pl-1
@@ -107,6 +108,7 @@
                         type="password"
                         name="password"
                         class="
+                          text-gray-600
                           block
                           w-full
                           -ml-10
@@ -117,8 +119,9 @@
                           border-2 border-gray-200
                           outline-none
                           focus:border-green-500
+                          text-sm
                         "
-                        placeholder="************"
+                        placeholder="***********"
                       />
                     </div>
                     <ErrorMessage
@@ -141,7 +144,7 @@
                     text-white
                     rounded-lg
                     px-4
-                    py-3
+                    py-2
                     font-semibold
                     flex
                     items-center

@@ -14,6 +14,7 @@ import {
   min_value as minValue,
   max_value as maxValue,
   confirmed,
+  mimes,
 } from "@vee-validate/rules";
 
 export default {
@@ -31,6 +32,7 @@ export default {
     defineRule("min_value", minValue);
     defineRule("max_value", maxValue);
     defineRule("password_mismatch", confirmed);
+    defineRule("mimes", mimes);
 
     configure({
       generateMessage: (context) => {

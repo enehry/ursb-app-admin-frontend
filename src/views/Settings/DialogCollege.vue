@@ -76,6 +76,7 @@
                       class="text-xs text-primary font-semibold px-1 uppercase"
                       >College Name</label
                     >
+
                     <div class="block">
                       <div class="flex">
                         <div

@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import VeeValidatePlugin from "./includes/validation";
 import Notifications from "@kyvg/vue3-notification";
+import AdminModal from "./components/AdminModal";
 
 import "./main.css";
 
@@ -17,5 +18,6 @@ app.use(store);
 app.use(router);
 app.use(VeeValidatePlugin);
 app.use(Notifications);
+app.component("AdminModal", AdminModal);
 
 app.mount("#app");
