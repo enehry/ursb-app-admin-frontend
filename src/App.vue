@@ -6,18 +6,23 @@
     :duration="3000"
     :width="500"
     animation-name="v-fade-top"
-  />
+  ></notifications>
   <notifications
     group="admin"
     position="top right"
     :duration="3000"
     animation-name="v-fade-top"
-  />
+  ></notifications>
+  <notification-with-button></notification-with-button>
   <router-view></router-view>
 </template>
 <script>
 import { mapActions } from "vuex";
+import NotificationWithButton from "./components/Notification_With_Button.vue";
 export default {
+  components: {
+    NotificationWithButton,
+  },
   name: "App",
   created() {
     this.initializeUserData();

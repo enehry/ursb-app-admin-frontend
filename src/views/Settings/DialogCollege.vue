@@ -121,7 +121,37 @@
                     </div>
                   </div>
                 </div>
+                <div class="flex items-center mt-2">
+                  <span
+                    class="
+                      block
+                      uppercase
+                      font-semibold
+                      mr-4
+                      text-primary text-xs
+                    "
+                  >
+                    Select a color :
+                  </span>
+                  <div class="grid grid-cols-5 gap-2">
+                    <button
+                      type="button"
+                      v-for="color in colors"
+                      :key="color.name"
+                      :class="[
+                        {
+                          'ring-1 ring-offset-1 ring-gray-500':
+                            selectedColor === color.name,
+                        },
+                        color.bg,
+                      ]"
+                      class="h-4 w-4 rounded-sm"
+                      @click.prevent="toggleSelectedColor(color.name)"
+                    ></button>
+                  </div>
+                </div>
               </div>
+
               <!--footer-->
               <div
                 class="
@@ -208,6 +238,14 @@ export default {
       collegeSchema: {
         name: "required|min:6|max:100",
       },
+      selectedColor: "red",
+      colors: [
+        { name: "red", bg: "bg-red-500" },
+        { name: "green", bg: "bg-green-500" },
+        { name: "blue", bg: "bg-blue-500" },
+        { name: "yellow", bg: "bg-yellow-500" },
+        { name: "gray", bg: "bg-gray-500" },
+      ],
     };
   },
   computed: {
@@ -221,6 +259,9 @@ export default {
         this.$refs.collegeForm.resetForm();
         this.resetCollegeCourseErrors();
       }
+    },
+    toggleSelectedColor(color) {
+      this.selectedColor = color;
     },
     async save(values) {
       if (!this.college) {
@@ -237,6 +278,7 @@ export default {
           }
         });
         values.abbr = abbr.join("");
+        values.color = this.selectedColor;
         if (await this.saveCollege(values)) this.toggleModal();
       } else {
         const c = this.college;

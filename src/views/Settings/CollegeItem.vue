@@ -12,11 +12,14 @@
     "
   >
     <div class="block">
-      <h1 class="text-sm font-bold flex text-secondary">
-        <chevron-right-icon class="h-5 w-5 text-secondary"></chevron-right-icon>
+      <h1 class="text-sm font-bold flex items-center text-secondary">
+        <chevron-right-icon
+          class="h-5 w-5 mr-1 rounded-full text-white"
+          :class="collegeColor"
+        ></chevron-right-icon>
         {{ college.abbr }}
       </h1>
-      <h2 class="text-xs text-primary ml-5">{{ college.name }}</h2>
+      <h2 class="text-xs text-primary ml-6">{{ college.name }}</h2>
     </div>
     <div class="flex gap-2">
       <button @click.prevent="toggleDelete(college.id)" class="h-5">
@@ -47,6 +50,11 @@ export default {
     TrashIcon,
     PencilIcon,
     DialogCollege,
+  },
+  computed: {
+    collegeColor() {
+      return `bg-${this.college.color}-500`;
+    },
   },
   methods: {
     ...mapActions(["deleteCollege"]),

@@ -3,7 +3,7 @@
     class="
       flex flex-col
       w-full
-      md:w-64
+      md:w-60
       text-gray-700
       bg-white
       dark-mode:text-gray-200 dark-mode:bg-gray-800
@@ -54,7 +54,7 @@
     </div>
     <nav
       :class="{ block: open, hidden: !open }"
-      class="flex-grow md:block px-4 pb-4 md:pb-0 md:overflow-y-auto"
+      class="flex-grow md:block pb-4 md:pb-0 md:overflow-y-auto"
     >
       <!-- logo -->
       <div class="mx-7 block">
@@ -80,7 +80,7 @@
       </div>
       <hr class="border-2" />
       <!-- nav -->
-      <div class="px-2">
+      <div class="pl-2">
         <router-link
           v-for="menu in menus"
           :key="menu.routeName"

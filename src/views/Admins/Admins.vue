@@ -6,47 +6,77 @@
         Manage admins. You can register, view and delete admins on this page.
       </h6>
     </div>
-    <div>
-      <div class="flex items-center justify-between w-full mb-5">
-        <div class="pt-2 flex content-center items-center text-gray-600">
-          <input
-            class="
-              border-2 border-gray-300
-              bg-white
-              h-10
-              px-5
-              pr-8
-              w-80
-              rounded-lg
-              text-xs
-              hover:border-green-600
-              focus:outline-none focus:border-green-600
-            "
-            type="search"
-            name="search"
-            placeholder="Search"
-          />
-          <button type="submit" class="w-5 h-5 -ml-7 mr-4">
-            <search-icon></search-icon>
-          </button>
-        </div>
-        <router-link
-          :to="{ name: 'CreateAdmin' }"
+    <div class="block lg:flex content-center items-center w-full mb-5">
+      <div class="mb-2 pt-2 flex content-center items-center text-gray-600">
+        <input
           class="
-            flex
-            justify-center
-            items-center
-            w-7
-            h-7
-            bg-secondary
-            rounded-full
-            hover:bg-green-600
+            border-2 border-gray-300
+            bg-white
+            px-5
+            pr-8
+            w-full
+            lg:w-80
+            h-10
+            rounded-lg
+            text-xs
+            hover:border-green-600
+            focus:outline-none focus:border-green-600
           "
+          type="search"
+          name="search"
+          placeholder="Search"
+          v-model="keyword"
+        />
+        <button type="submit" class="w-5 h-5 -ml-7 mr-4">
+          <search-icon></search-icon>
+        </button>
+      </div>
+      <div class="flex w-full gap-2 items-center justify-between">
+        <select v-model="filter" class="px-2 py-2 border rounded-md text-xs">
+          <option value="" selected disabled>Sort by</option>
+          <option value="desc">Older first</option>
+          <option value="asc">Newest first</option>
+          <option value="col">College</option>
+        </select>
+        <div
+          class="actions flex gap-2 items-center content-center justify-center"
         >
-          <plus-icon class="h-5 text-white"></plus-icon>
-        </router-link>
+          <router-link
+            :to="{ name: 'admin-trash' }"
+            class="
+              flex
+              justify-center
+              items-center
+              bg-red-500
+              rounded-md
+              hover:bg-red-600
+              px-2
+              py-1
+            "
+          >
+            <trash-icon class="h-3 text-white"></trash-icon>
+            <span class="text-white text-xs">Trash</span>
+          </router-link>
+          <router-link
+            :to="{ name: 'CreateAdmin' }"
+            class="
+              flex
+              justify-center
+              items-center
+              bg-secondary
+              rounded-md
+              hover:bg-green-600
+              px-2
+              py-1
+            "
+          >
+            <plus-icon class="h-3 text-white"></plus-icon>
+            <span class="text-white text-xs">New</span>
+          </router-link>
+        </div>
       </div>
     </div>
+
     <div
       class="
         grid grid-cols-1
@@ -57,141 +87,62 @@
       "
     >
       <div
+        v-for="admin in searchResult"
+        :key="admin.id"
         class="
           w-full
           bg-white
           rounded-lg
-          p-12
           flex flex-col
           justify-center
           items-center
+          p-4
         "
       >
-        <div class="mb-8">
-          <img
-            class="object-center object-cover rounded-full h-36 w-36"
-            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
-            alt="photo"
-          />
+        <div class="flex w-full justify-end">
+          <button>
+            <pencil-icon
+              class="w-5 h-5 text-gray-500 hover:text-blue-500"
+            ></pencil-icon>
+          </button>
+          <button @click="remove(admin)">
+            <trash-icon
+              class="w-5 h-5 text-gray-500 hover:text-red-500"
+            ></trash-icon>
+          </button>
         </div>
-        <div class="text-center">
-          <p class="text-xl text-gray-700 font-bold mb-2">Dany Bailey</p>
-          <p class="text-base text-gray-400 font-normal">Software Engineer</p>
-        </div>
-      </div>
-      <div
-        class="
-          w-full
-          bg-white
-          rounded-lg
-          p-12
-          flex flex-col
-          justify-center
-          items-center
-        "
-      >
-        <div class="mb-8">
-          <img
-            class="object-center object-cover rounded-full h-36 w-36"
-            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
-            alt="photo"
-          />
-        </div>
-        <div class="text-center">
-          <p class="text-xl text-gray-700 font-bold mb-2">Lucy Carter</p>
-          <p class="text-base text-gray-400 font-normal">Graphic Designer</p>
-        </div>
-      </div>
-      <div
-        class="
-          w-full
-          bg-white
-          rounded-lg
-          p-12
-          flex flex-col
-          justify-center
-          items-center
-        "
-      >
-        <div class="mb-8">
-          <img
-            class="object-center object-cover rounded-full h-36 w-36"
-            src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1176&q=80"
-            alt="photo"
-          />
-        </div>
-        <div class="text-center">
-          <p class="text-xl text-gray-700 font-bold mb-2">Jade Bradley</p>
-          <p class="text-base text-gray-400 font-normal">Dev Ops</p>
-        </div>
-      </div>
-      <div
-        class="
-          w-full
-          bg-white
-          rounded-lg
-          p-12
-          flex flex-col
-          justify-center
-          items-center
-        "
-      >
-        <div class="mb-8">
-          <img
-            class="object-center object-cover rounded-full h-36 w-36"
-            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
-            alt="photo"
-          />
-        </div>
-        <div class="text-center">
-          <p class="text-xl text-gray-700 font-bold mb-2">Dany Bailey</p>
-          <p class="text-base text-gray-400 font-normal">Software Engineer</p>
-        </div>
-      </div>
-      <div
-        class="
-          w-full
-          bg-white
-          rounded-lg
-          p-12
-          flex flex-col
-          justify-center
-          items-center
-        "
-      >
-        <div class="mb-8">
-          <img
-            class="object-center object-cover rounded-full h-36 w-36"
-            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
-            alt="photo"
-          />
-        </div>
-        <div class="text-center">
-          <p class="text-xl text-gray-700 font-bold mb-2">Lucy Carter</p>
-          <p class="text-base text-gray-400 font-normal">Graphic Designer</p>
-        </div>
-      </div>
-      <div
-        class="
-          w-full
-          bg-white
-          rounded-lg
-          p-12
-          flex flex-col
-          justify-center
-          items-center
-        "
-      >
-        <div class="mb-8">
-          <img
-            class="object-center object-cover rounded-full h-36 w-36"
-            src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1176&q=80"
-            alt="photo"
-          />
-        </div>
-        <div class="text-center">
-          <p class="text-xl text-gray-700 font-bold mb-2">Jade Bradley</p>
-          <p class="text-base text-gray-400 font-normal">Dev Ops</p>
+        <div class="body p-6">
+          <div class="mb-8 w-full flex justify-center">
+            <img
+              class="ring-4 object-center object-cover rounded-full h-28 w-28"
+              :class="ringColor(admin.college.color)"
+              :src="`http://127.0.0.1:8000${admin.avatar}`"
+            />
+          </div>
+          <div class="text-center">
+            <p class="text-md text-gray-600 font-bold mb-2">
+              {{ `${admin.fname}  ${admin.lname}` }}
+            </p>
+            <p class="text-sm uppercase text-gray-500 font-normal">
+              {{ admin.position }}
+            </p>
+            <div class="flex w-full mt-2 justify-center">
+              <p
+                class="
+                  text-sm
+                  px-2
+                  py-1
+                  rounded-lg
+                  w-min
+                  text-white
+                  font-normal
+                "
+                :class="bgColor(admin.college.color)"
+              >
+                {{ admin.college.abbr }}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -199,13 +150,70 @@
 </template>
 
 <script>
-import { SearchIcon, PlusIcon } from "@heroicons/vue/solid";
+import { mapActions, mapGetters } from "vuex";
+import {
+  SearchIcon,
+  PlusIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/vue/solid";
+
 export default {
   components: {
     SearchIcon,
     PlusIcon,
+    PencilIcon,
+    TrashIcon,
+  },
+  async created() {
+    await this.getAllAdmins();
+    this.searched = this.admins;
+  },
+  data() {
+    return {
+      keyword: "",
+      filter: "",
+      searched: [],
+    };
+  },
+  computed: {
+    ...mapGetters(["admins"]),
+    searchResult() {
+      let admins = this.searched;
+
+      if (this.keyword != "" && this.keyword) {
+        admins = admins.filter((item) => {
+          return item.fname.toUpperCase().includes(this.keyword.toUpperCase());
+        });
+      }
+
+      if (this.filter === "asc") {
+        admins = admins.sort((a, b) =>
+          a.id < b.id ? 1 : b.id < a.id ? -1 : 0
+        );
+      } else if (this.filter === "desc") {
+        admins = admins.sort((a, b) =>
+          a.id > b.id ? 1 : b.id > a.id ? -1 : 0
+        );
+      } else if (this.filter === "col") {
+        admins = admins.sort((a, b) =>
+          a.college.abbr.localeCompare(b.college.abbr)
+        );
+      }
+
+      return admins;
+    },
+  },
+  methods: {
+    ...mapActions(["getAllAdmins", "adminMoveToTrash"]),
+    ringColor: (color) => `ring-${color}-400`,
+    bgColor: (color) => `bg-${color}-500`,
+
+    remove(admin) {
+      this.adminMoveToTrash(admin);
+    },
   },
 };
 </script>
 
-<style></style>
+<style scoped></style>

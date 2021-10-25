@@ -51,6 +51,15 @@ const routes = [
           ),
       },
       {
+        path: "/admins/trash",
+        name: "admin-trash",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(/* webpackChunkName: "home" */ "../views/Admins/Trash.vue"),
+      },
+      {
         path: "/deans-list",
         name: "DeansList",
         // route level code-splitting

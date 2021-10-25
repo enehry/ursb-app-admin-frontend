@@ -47,6 +47,7 @@
     </div>
   </admin-modal>
   <vee-form
+    ref="createAdminForm"
     :validation-schema="createAdminSchema"
     @submit="save"
     v-slot="{ errors }"
@@ -142,7 +143,6 @@
                       <vee-field
                         type="text"
                         name="fname"
-                        autocomplete="given-name"
                         class="
                           py-2
                           px-3
@@ -356,7 +356,7 @@
                         <option
                           v-for="college in collegesAndCourses"
                           :key="college.id"
-                          :value="college"
+                          :value="college.id"
                         >
                           {{ college.name }}
                         </option>
@@ -553,7 +553,7 @@ export default {
       console.log(values);
       const data = new FormData();
       if (values.avatar) data.append("avatar", values.avatar[0]);
-      if (values.college) data.append("college_id", values.college.id);
+      if (values.college) data.append("college_id", values.college);
       if (values.course) data.append("course_id", values.course.id);
 
       data.append("fname", values.fname);
@@ -561,10 +561,11 @@ export default {
       data.append("lname", values.lname);
       data.append("email", values.email);
       data.append("password", values.password);
-      data.append("position_name", values.position_name);
+      data.append("position_name", values.type);
 
       if (await this.register(data)) {
         this.isOk = true;
+        this.$refs.createAdminForm.resetForm();
         return;
       } else {
         this.isShow = false;
@@ -576,7 +577,10 @@ export default {
     },
     setCourses() {
       this.course = null;
-      this.fromCollege = this.selectedCollege.course;
+      this.fromCollege = this.collegesAndCourses.find(
+        (x) => x.id == this.selectedCollege
+      ).course;
+      console.log(this.fromCollege);
     },
   },
 };
