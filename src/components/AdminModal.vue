@@ -23,18 +23,24 @@
     >
       <div class="relative w-auto my-6 mx-auto max-w-3xl">
         <!--content-->
-        <div class="bg-white p-5 rounded-md">
+        <div class="bg-white p-5 rounded-md shadow-lg">
           <slot></slot>
         </div>
       </div>
     </div>
   </transition>
+
   <div v-if="showModal" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
 </template>
 
 <script>
 export default {
   props: ["showModal"],
+  data() {
+    return {
+      isShow: true,
+    };
+  },
 };
 </script>
 

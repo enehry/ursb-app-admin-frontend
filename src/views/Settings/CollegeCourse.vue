@@ -77,7 +77,7 @@
                 </div>
               </dialog-course>
             </div>
-            <div class="block mt-4 divide-y">
+            <div class="block mt-4">
               <!-- COURSE --->
               <course-item
                 v-for="course in courses"

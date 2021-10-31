@@ -19,7 +19,7 @@ const getters = {
     return `${user.fname} ${user.mname} ${user.lname}`;
   },
   email: (state) => state.userData.email,
-  position: () => "Admin",
+  position: () => state.userData.position,
 };
 
 const actions = {

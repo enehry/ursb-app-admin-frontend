@@ -11,14 +11,21 @@
     "
   >
     <div
-      class="bg-gray-100 text-gray-500 shadow-xl w-full overflow-hidden"
+      class="
+        rounded-lg
+        bg-gray-100
+        text-gray-500
+        shadow-xl
+        w-full
+        overflow-hidden
+      "
       style="max-width: 1000px"
     >
       <div class="md:flex">
-        <div class="hidden md:block w-1/2 bg-green-300 p-24 text-center">
+        <div class="hidden md:block w-1/2 bg-green-400 p-24 text-center">
           <div class="content-center justify-center">
-            <h1 class="text-3xl text-gray-600 font-bold">The CCS App</h1>
-            <p class="text-sm text-gray-500 mb-10">
+            <h1 class="text-3xl text-gray-100 font-bold">The CCS App</h1>
+            <p class="text-sm text-gray-100 mb-10">
               Manage The CCS App mobile app using admin panel
             </p>
             <img

@@ -39,24 +39,10 @@
           <option value="col">College</option>
         </select>
         <div
+          v-if="position.toLowerCase() === 'admin'"
           class="actions flex gap-2 items-center content-center justify-center"
         >
-          <router-link
-            :to="{ name: 'admin-trash' }"
-            class="
-              flex
-              justify-center
-              items-center
-              bg-red-500
-              rounded-md
-              hover:bg-red-600
-              px-2
-              py-1
-            "
-          >
-            <trash-icon class="h-3 text-white"></trash-icon>
-            <span class="text-white text-xs">Trash</span>
-          </router-link>
+          <trash></trash>
           <router-link
             :to="{ name: 'CreateAdmin' }"
             class="
@@ -99,12 +85,15 @@
           p-4
         "
       >
-        <div class="flex w-full justify-end">
-          <button>
+        <div
+          v-if="position.toLowerCase() === 'admin'"
+          class="flex w-full justify-end"
+        >
+          <router-link :to="{ name: 'EditAdmin' }">
             <pencil-icon
               class="w-5 h-5 text-gray-500 hover:text-blue-500"
             ></pencil-icon>
-          </button>
+          </router-link>
           <button @click="remove(admin)">
             <trash-icon
               class="w-5 h-5 text-gray-500 hover:text-red-500"
@@ -151,6 +140,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import Trash from "./Trash.vue";
 import {
   SearchIcon,
   PlusIcon,
@@ -164,6 +154,7 @@ export default {
     PlusIcon,
     PencilIcon,
     TrashIcon,
+    Trash,
   },
   async created() {
     await this.getAllAdmins();
@@ -177,7 +168,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["admins"]),
+    ...mapGetters(["admins", "position"]),
     searchResult() {
       let admins = this.searched;
 

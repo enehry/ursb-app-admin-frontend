@@ -3,6 +3,7 @@ import { notify } from "@kyvg/vue3-notification";
 const state = {
   admins: [],
   adminErrors: null,
+  adminTrash: [],
 };
 const getters = {
   admins: (state) => state.admins,
@@ -15,6 +16,7 @@ const getters = {
     }
     return false;
   },
+  adminTrash: (state) => state.adminTrash,
   filterAdmins:
     (state) =>
     (filter = "") => {
@@ -35,9 +37,15 @@ const mutations = {
   adminToTrash(state, admin) {
     const i = state.admins.map((item) => item.id).indexOf(admin.id);
     state.admins.splice(i, 1);
+    state.adminTrash.push(admin);
   },
   setRestoredAdmin(state, admin) {
+    const i = state.adminTrash.map((item) => item.id).indexOf(admin.id);
+    state.adminTrash.splice(i, 1);
     state.admins.push(admin);
+  },
+  setTrash(state, trash) {
+    state.adminTrash = trash;
   },
 };
 const actions = {
@@ -45,7 +53,14 @@ const actions = {
     try {
       const res = await http.get("api/admin/all");
       commit("setAdmins", res.data.admins);
-      console.log(res.data.admins);
+    } catch (ex) {
+      console.log(ex.response);
+    }
+  },
+  async getAdminTrash({ commit }) {
+    try {
+      const res = await http.get("api/admin/trash/all");
+      commit("setTrash", res.data.adminTrash);
     } catch (ex) {
       console.log(ex.response);
     }
@@ -110,6 +125,27 @@ const actions = {
           commit("setAdminErrors", ex.response.data);
           console.log(ex.response.data);
         }
+      }
+      console.log(ex.response);
+      return false;
+    }
+  },
+  async deleteAdmin({ state }, id) {
+    try {
+      const res = await http.delete(`api/admin/force-delete/${id}`);
+      const i = state.adminTrash.map((item) => item.id).indexOf(id);
+      state.adminTrash.splice(i, 1);
+      notify({
+        group: "admin",
+        title: "Admin Deleted",
+        text: res.data.message,
+        type: "success",
+      });
+
+      return true;
+    } catch (ex) {
+      if (ex.response) {
+        console.log(ex.response.data);
       }
       console.log(ex.response);
       return false;
