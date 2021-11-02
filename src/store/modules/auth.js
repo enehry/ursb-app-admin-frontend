@@ -31,7 +31,7 @@ const actions = {
       console.log(res);
       commit("setToken", res.data.token);
       const user = await http.get("api/admin/me");
-      commit("setUserData", user.data);
+      commit("setUserData", user.data.admin);
       router.push({ name: "Home" });
     } catch (ex) {
       if (ex.response.status == 422) {

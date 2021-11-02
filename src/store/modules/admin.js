@@ -3,7 +3,7 @@ import { notify } from "@kyvg/vue3-notification";
 const state = {
   admins: [],
   adminErrors: null,
-  adminTrash: [],
+  admin: null,
 };
 const getters = {
   admins: (state) => state.admins,
@@ -16,6 +16,7 @@ const getters = {
     }
     return false;
   },
+  admin: (state) => state.admin,
   adminTrash: (state) => state.adminTrash,
   filterAdmins:
     (state) =>
@@ -47,8 +48,20 @@ const mutations = {
   setTrash(state, trash) {
     state.adminTrash = trash;
   },
+  setAdmin(state, admin) {
+    state.admin = admin;
+  },
 };
 const actions = {
+  async getAdmin({ commit }, id) {
+    try {
+      const res = await http.get(`api/admin/get-admin/${id}`);
+      commit("setAdmin", res.data.admin);
+      console.log(res.data.admin);
+    } catch (ex) {
+      console.log(ex.response);
+    }
+  },
   async getAllAdmins({ commit }) {
     try {
       const res = await http.get("api/admin/all");
@@ -100,6 +113,38 @@ const actions = {
       });
     } catch (ex) {
       console.log(ex.response);
+    }
+  },
+  async updateAdmin({ commit }, payload) {
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    console.log(payload);
+    try {
+      const res = await http.post(
+        `api/admin/update/${payload.get("id")}`,
+        payload,
+        config
+      );
+      notify({
+        group: "admin",
+        title: "Admin Successfully Updated",
+        text: res.data.message,
+        type: "success",
+      });
+
+      return true;
+    } catch (ex) {
+      if (ex.response) {
+        if (ex.response.status == 422) {
+          commit("setAdminErrors", ex.response.data);
+          console.log(ex.response.data);
+        }
+      }
+      console.log(ex.response);
+      return false;
     }
   },
   async register({ commit }, payload) {

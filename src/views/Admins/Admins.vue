@@ -89,7 +89,7 @@
           v-if="position.toLowerCase() === 'admin'"
           class="flex w-full justify-end"
         >
-          <router-link :to="{ name: 'EditAdmin' }">
+          <router-link :to="{ name: 'EditAdmin', params: { id: admin.id } }">
             <pencil-icon
               class="w-5 h-5 text-gray-500 hover:text-blue-500"
             ></pencil-icon>
@@ -103,9 +103,17 @@
         <div class="body p-6">
           <div class="mb-8 w-full flex justify-center">
             <img
+              v-if="admin.avatar"
               class="ring-4 object-center object-cover rounded-full h-28 w-28"
               :class="ringColor(admin.college.color)"
               :src="`http://127.0.0.1:8000${admin.avatar}`"
+            />
+            <img
+              v-else
+              class="ring-4 object-center object-cover rounded-full h-28 w-28"
+              :class="ringColor(admin.college.color)"
+              :src="`https://avatars.dicebear.com/api/initials/${admin.fname}.svg?background=%23bcbcbc`"
+              alt=""
             />
           </div>
           <div class="text-center">

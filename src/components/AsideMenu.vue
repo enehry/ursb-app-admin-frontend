@@ -65,12 +65,20 @@
             rounded-full
             w-16
             h-16
-            ring ring-green-600 ring-offset-base-100 ring-offset-2
+            ring ring-offset-base-100 ring-offset-2
           "
+          :class="`ring-${userData.college.color}-500`"
         >
           <img
+            v-if="userData.avatar"
             class="object-cover rounded-full w-full h-full"
             :src="`http://127.0.0.1:8000${this.userData.avatar}`"
+          />
+          <img
+            v-else
+            class="object-cover object-center rounded-full w-full h-full"
+            :src="`https://avatars.dicebear.com/api/initials/${userData.fname}.svg?background=%23bcbcbc`"
+            alt=""
           />
         </div>
         <h3 class="text-md font-bold">{{ fullName }}</h3>

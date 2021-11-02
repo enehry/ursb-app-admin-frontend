@@ -47,10 +47,11 @@
     </div>
   </admin-modal>
   <vee-form
-    ref="createAdminForm"
+    ref="updateAdminForm"
     :validation-schema="createAdminSchema"
     @submit="save"
     v-slot="{ errors }"
+    :initial-values="admin"
   >
     <div class="create-admin block md:mt-10">
       <div class="sm:mt-0 w-full">
@@ -58,10 +59,10 @@
           <div class="md:col-span-1">
             <div class="px-4 sm:px-0">
               <h3 class="text-md font-medium leading-6 text-gray-900">
-                Create New Admin
+                Update Admin
               </h3>
               <p class="mt-1 text-xs text-gray-600">
-                Use a permanent address where you can receive mail.
+                If data not automatically reflect please re-login
               </p>
             </div>
           </div>
@@ -234,6 +235,7 @@
                         >Email</label
                       >
                       <vee-field
+                        disabled
                         type="email"
                         name="email"
                         autocomplete="given-name"
@@ -275,9 +277,11 @@
           <div class="md:col-span-1">
             <div class="px-4 sm:px-0">
               <h3 class="text-md font-medium leading-6 text-gray-900">
-                Password
+                Position
               </h3>
-              <p class="mt-1 text-xs text-gray-600">Make a strong password</p>
+              <p class="mt-1 text-xs text-gray-600">
+                Change Admin Current Position
+              </p>
             </div>
           </div>
           <div class="mt-5 md:mt-0 md:col-span-2">
@@ -293,8 +297,9 @@
                       >
                       <vee-field
                         v-model="userType"
+                        v-on:change="changeUserType()"
                         as="select"
-                        name="type"
+                        name="position"
                         class="
                           text-xs
                           block
@@ -329,11 +334,10 @@
                         >College</label
                       >
                       <vee-field
-                        :disabled="!userType"
                         @change="setCourses"
                         v-model="selectedCollege"
                         as="select"
-                        name="college"
+                        name="college_id"
                         class="
                           text-xs
                           block
@@ -372,7 +376,7 @@
                         :disabled="userType !== 'Program Head'"
                         as="select"
                         v-model="course"
-                        name="course"
+                        name="course_id"
                         class="
                           text-xs
                           block
@@ -401,74 +405,6 @@
                           {{ course.name }}
                         </option>
                       </vee-field>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
-                    <div class="w-full">
-                      <label
-                        for="password"
-                        class="text-left block text-sm text-gray-600"
-                        >Password</label
-                      >
-                      <vee-field
-                        type="password"
-                        name="password"
-                        class="
-                          py-2
-                          px-3
-                          mt-1
-                          focus:outline-none
-                          focus:ring-1
-                          focus:ring-green-300
-                          focus:border-green-500
-                          hover:border-green-600
-                          block
-                          w-full
-                          shadow-sm
-                          sm:text-sm
-                          border border-gray-300
-                          rounded-md
-                          text-secondary
-                        "
-                        :class="{ 'border-red-500': errors.password }"
-                      />
-                      <ErrorMessage
-                        class="text-red-600 text-xs"
-                        name="password"
-                      />
-                    </div>
-                    <div class="w-full">
-                      <label
-                        for="password"
-                        class="text-left block text-sm text-gray-600"
-                        >Confirm password</label
-                      >
-                      <vee-field
-                        type="password"
-                        name="confirm_password"
-                        class="
-                          py-2
-                          px-3
-                          mt-1
-                          focus:outline-none
-                          focus:ring-1
-                          focus:ring-green-300
-                          focus:border-green-500
-                          hover:border-green-600
-                          block
-                          w-full
-                          shadow-sm
-                          sm:text-sm
-                          border border-gray-300
-                          rounded-md
-                          text-secondary
-                        "
-                        :class="{ 'border-red-500': errors.confirm_password }"
-                      />
-                      <ErrorMessage
-                        class="text-red-500 text-xs"
-                        name="confirm_password"
-                      />
                     </div>
                   </div>
                 </div>
@@ -514,8 +450,10 @@ export default {
   components: {
     DotsCircleHorizontalIcon,
   },
+  props: ["id"],
   async created() {
     await this.getCollegesAndCourses();
+    await this.getAdmin(this.$route.params.id);
   },
   data() {
     return {
@@ -530,15 +468,18 @@ export default {
         avatar: "mimes:image/*",
         fname: "required",
         lname: "required",
-        email: "required|email|min:3|max:100",
-        type: "required",
-        password: "required|min:6",
-        confirm_password: "password_mismatch:@password",
+        position: "required",
+        college_id: "required",
       },
     };
   },
   computed: {
-    ...mapGetters(["collegesAndCourses", "adminErrors", "isEmailError"]),
+    ...mapGetters([
+      "collegesAndCourses",
+      "adminErrors",
+      "isEmailError",
+      "admin",
+    ]),
     avatarImage() {
       if (this.avatar) {
         return URL.createObjectURL(this.avatar[0]);
@@ -547,25 +488,25 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getCollegesAndCourses", "register"]),
+    ...mapActions(["getCollegesAndCourses", "updateAdmin", "getAdmin"]),
     async save(values) {
       this.isShow = true;
       console.log(values);
       const data = new FormData();
       if (values.avatar) data.append("avatar", values.avatar[0]);
-      if (values.college) data.append("college_id", values.college);
+      data.append("college_id", values.college_id);
       if (values.course) data.append("course_id", values.course.id);
 
       data.append("fname", values.fname);
       data.append("mname", values.mname);
       data.append("lname", values.lname);
-      data.append("email", values.email);
-      data.append("password", values.password);
-      data.append("position_name", values.type);
+      data.append("id", this.admin.id);
 
-      if (await this.register(data)) {
+      data.append("position", values.position);
+
+      if (await this.updateAdmin(data)) {
         this.isOk = true;
-        this.$refs.createAdminForm.resetForm();
+        this.$refs.updateAdminForm.resetForm();
         return;
       } else {
         this.isShow = false;
@@ -580,7 +521,11 @@ export default {
       this.fromCollege = this.collegesAndCourses.find(
         (x) => x.id == this.selectedCollege
       ).course;
-      console.log(this.fromCollege);
+    },
+    changeUserType() {
+      if (this.userType === "Admin") {
+        this.course = null;
+      }
     },
   },
 };
