@@ -61,7 +61,7 @@
         <div
           class="
             mb-2
-            mt-5
+            mt-2
             rounded-full
             w-16
             h-16

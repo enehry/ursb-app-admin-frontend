@@ -78,7 +78,8 @@
         class="
           w-full
           bg-white
-          rounded-lg
+          rounded-md
+          shadow-md
           flex flex-col
           justify-center
           items-center

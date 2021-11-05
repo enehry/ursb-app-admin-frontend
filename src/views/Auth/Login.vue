@@ -207,16 +207,15 @@ export default {
   },
   methods: {
     ...mapActions(["login"]),
-    submitLogin(values) {
+    async submitLogin(values) {
       values.device_name = "Web";
-      console.log(values);
-      this.logInSubmission = true;
+
       const deviceDetector = new DeviceDetector();
       const device = deviceDetector.parse(navigator.userAgent);
 
       console.log(device);
 
-      this.login(values);
+      await this.login(values);
     },
   },
 };

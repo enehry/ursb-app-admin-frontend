@@ -62,6 +62,28 @@ const routes = [
           ),
       },
       {
+        path: "/students",
+        name: "Students",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(
+            /* webpackChunkName: "home" */ "../views/Students/Students.vue"
+          ),
+      },
+      {
+        path: "/Bulletin-Board",
+        name: "BulletinBoard",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(
+            /* webpackChunkName: "home" */ "../views/BulletinBoard/BulletinBoard.vue"
+          ),
+      },
+      {
         path: "/deans-list",
         name: "DeansList",
         // route level code-splitting
