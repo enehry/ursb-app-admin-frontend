@@ -1,15 +1,28 @@
 <template>
-  <div class="bulletin-board uppercase text-sm font-bold mb-8">
+  <div class="bulletin-board uppercase text-sm font-bold mb-4">
     Bulletin Board
   </div>
   <div class="lg:flex block">
     <div class="block w-full lg:mr-4">
       <!--- POSTS LIST -->
+      <search></search>
       <post v-for="post in posts" :key="post.id" :post="post"></post>
     </div>
 
     <div class="w-full lg:w-1/4">
-      <div class="heading p-4 bg-white mb-3 shadow-md rounded-md">
+      <div
+        class="
+          heading
+          flex
+          pl-2
+          items-center
+          h-10
+          bg-white
+          mb-3
+          shadow-md
+          rounded-md
+        "
+      >
         <h1 class="uppercase text-xs font-semibold">My recent post</h1>
       </div>
       <div
@@ -77,28 +90,70 @@
       </div>
     </div>
   </div>
+  <div
+    class="
+      flex
+      w-full
+      lg:w-10/12
+      text-center
+      items-center
+      content-center
+      justify-center
+      mb-20
+    "
+  >
+    <InfiniteLoading @infinite="loadNext" />
+  </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
+import Search from "./Search.vue";
+
 import Post from "./Post.vue";
 
 export default {
-  async created() {
+  data() {
+    return {
+      result: "",
+    };
+  },
+  async beforeMount() {
     await this.getPosts();
     console.log(this.posts);
     console.log("create");
   },
+  mounted() {},
   components: {
     Post,
+    InfiniteLoading,
+    Search,
   },
   computed: {
     ...mapGetters(["posts"]),
   },
   methods: {
     ...mapActions(["getPosts"]),
+    async loadNext(state) {
+      if (this.result === "empty") {
+        state.complete();
+        return;
+      } else if (res === "error") {
+        state.error();
+        return;
+      }
+      var res = await this.getPosts();
+      this.result = res;
+      state.loaded();
+    },
   },
 };
 </script>
 
-<style></style>
+<style>
+#vue3-infinite-loading > span {
+  @apply uppercase text-sm font-semibold;
+}
+</style>

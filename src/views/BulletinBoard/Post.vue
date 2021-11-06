@@ -11,6 +11,7 @@
         lg:rounded-t-none lg:rounded-l
         text-center
         overflow-hidden
+        shadow-md
       "
     >
       <img
