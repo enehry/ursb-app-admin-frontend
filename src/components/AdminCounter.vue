@@ -1,14 +1,12 @@
 <template>
-  <div
-    class="grid content-around xl:grid-cols-4 md:grid-cols-2 lg:gap-14 gap-4"
-  >
+  <div class="grid content-around xl:grid-cols-4 md:grid-cols-2 lg:gap-4 gap-2">
     <admin-counter-item
       v-for="(counter, index) in counters"
       :key="index"
       :counter="counter"
     >
       <component
-        class="text-white h-10 w-10"
+        class="text-white h-8 w-8"
         :is="heroIcons[counter.icon]"
       ></component>
     </admin-counter-item>

@@ -29,5 +29,6 @@ app.use(Notifications);
 app.component("AdminModal", AdminModal);
 
 app.component("infinite-loading", InfiniteLoading);
+app.config.globalProperties.$baseURL = "http://localhost:8000";
 
 app.mount("#app");

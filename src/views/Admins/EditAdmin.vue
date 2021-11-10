@@ -85,9 +85,19 @@
                         "
                       >
                         <img
-                          v-if="avatar"
+                          v-if="selectedAvatar"
                           class="object-cover rounded-full w-full h-full"
                           :src="avatarImage"
+                        />
+                        <img
+                          v-else-if="avatar"
+                          class="object-cover rounded-full w-full h-full"
+                          :src="this.$baseURL + avatar"
+                        />
+                        <img
+                          v-else
+                          class="object-cover rounded-full w-full h-full"
+                          :src="`https://avatars.dicebear.com/api/initials/admin.svg?background=%23bcbcbc`"
                         />
                         <svg
                           else
@@ -101,8 +111,8 @@
                         </svg>
                       </span>
                       <vee-field
-                        v-model="avatar"
-                        name="avatar"
+                        v-model="selectedAvatar"
+                        name="image"
                         v-slot="{ handleChange, handleBlur }"
                       >
                         <input
@@ -373,7 +383,7 @@
                         >Course</label
                       >
                       <vee-field
-                        :disabled="userType !== 'Program Head'"
+                        :disabled="userType === 'Program Head'"
                         as="select"
                         v-model="course"
                         name="course_id"
@@ -400,7 +410,7 @@
                         <option
                           v-for="course in fromCollege"
                           :key="course.id"
-                          :value="course"
+                          :value="course.id"
                         >
                           {{ course.name }}
                         </option>
@@ -454,18 +464,23 @@ export default {
   async created() {
     await this.getCollegesAndCourses();
     await this.getAdmin(this.$route.params.id);
+    this.fromCollege = this.collegesAndCourses.find(
+      (college) => college.id === this.admin.college_id
+    ).course;
+    this.avatar = this.admin.avatar;
   },
   data() {
     return {
       isShow: false,
       isOk: false,
       avatar: null,
+      selectedAvatar: null,
       userType: "",
       selectedCollege: null,
       fromCollege: [],
       course: null,
       createAdminSchema: {
-        avatar: "mimes:image/*",
+        image: "mimes:image/*",
         fname: "required",
         lname: "required",
         position: "required",
@@ -481,8 +496,8 @@ export default {
       "admin",
     ]),
     avatarImage() {
-      if (this.avatar) {
-        return URL.createObjectURL(this.avatar[0]);
+      if (this.selectedAvatar) {
+        return URL.createObjectURL(this.selectedAvatar[0]);
       }
       return null;
     },
@@ -493,9 +508,9 @@ export default {
       this.isShow = true;
       console.log(values);
       const data = new FormData();
-      if (values.avatar) data.append("avatar", values.avatar[0]);
+      if (values.image) data.append("avatar", values.image[0]);
       data.append("college_id", values.college_id);
-      if (values.course) data.append("course_id", values.course.id);
+      if (values.course_id) data.append("course_id", values.course_id);
 
       data.append("fname", values.fname);
       data.append("mname", values.mname);
@@ -507,6 +522,8 @@ export default {
       if (await this.updateAdmin(data)) {
         this.isOk = true;
         this.$refs.updateAdminForm.resetForm();
+        this.$router.push("/admins");
+
         return;
       } else {
         this.isShow = false;

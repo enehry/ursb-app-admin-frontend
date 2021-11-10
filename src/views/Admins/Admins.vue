@@ -31,6 +31,7 @@
           <search-icon></search-icon>
         </button>
       </div>
+
       <div class="flex w-full gap-2 items-center justify-between">
         <select v-model="filter" class="px-2 py-2 border rounded-md text-xs">
           <option value="" selected disabled>Sort by</option>
@@ -62,84 +63,196 @@
         </div>
       </div>
     </div>
-
-    <div
-      class="
-        grid grid-cols-1
-        sm:grid-cols-2
-        md:grid-cols-2
-        lg:grid-cols-3
-        gap-6
-      "
-    >
-      <div
-        v-for="admin in searchResult"
-        :key="admin.id"
-        class="
-          w-full
-          bg-white
-          rounded-md
-          shadow-md
-          flex flex-col
-          justify-center
-          items-center
-          p-4
-        "
-      >
-        <div
-          v-if="position.toLowerCase() === 'admin'"
-          class="flex w-full justify-end"
-        >
-          <router-link :to="{ name: 'EditAdmin', params: { id: admin.id } }">
-            <pencil-icon
-              class="w-5 h-5 text-gray-500 hover:text-blue-500"
-            ></pencil-icon>
-          </router-link>
-          <button @click="remove(admin)">
-            <trash-icon
-              class="w-5 h-5 text-gray-500 hover:text-red-500"
-            ></trash-icon>
-          </button>
-        </div>
-        <div class="body p-6">
-          <div class="mb-8 w-full flex justify-center">
-            <img
-              v-if="admin.avatar"
-              class="ring-4 object-center object-cover rounded-full h-28 w-28"
-              :class="ringColor(admin.college.color)"
-              :src="`http://127.0.0.1:8000${admin.avatar}`"
-            />
-            <img
-              v-else
-              class="ring-4 object-center object-cover rounded-full h-28 w-28"
-              :class="ringColor(admin.college.color)"
-              :src="`https://avatars.dicebear.com/api/initials/${admin.fname}.svg?background=%23bcbcbc`"
-              alt=""
-            />
-          </div>
-          <div class="text-center">
-            <p class="text-md text-gray-600 font-bold mb-2">
-              {{ `${admin.fname}  ${admin.lname}` }}
-            </p>
-            <p class="text-sm uppercase text-gray-500 font-normal">
-              {{ admin.position }}
-            </p>
-            <div class="flex w-full mt-2 justify-center">
-              <p
-                class="
-                  text-sm
-                  px-2
-                  py-1
-                  rounded-lg
-                  w-min
-                  text-white
-                  font-normal
-                "
-                :class="bgColor(admin.college.color)"
-              >
-                {{ admin.college.abbr }}
-              </p>
-            </div>
+    <div class="flex flex-col">
+      <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+          <div
+            class="
+              shadow
+              overflow-hidden
+              border-b border-gray-200
+              sm:rounded-lg
+            "
+          >
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="
+                      px-6
+                      py-3
+                      text-left text-xs
+                      font-medium
+                      text-gray-500
+                      uppercase
+                      tracking-wider
+                    "
+                  >
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                    class="
+                      px-6
+                      py-3
+                      text-left text-xs
+                      font-medium
+                      text-gray-500
+                      uppercase
+                      tracking-wider
+                    "
+                  >
+                    Position
+                  </th>
+                  <th
+                    scope="col"
+                    class="
+                      px-6
+                      py-3
+                      text-xs
+                      font-medium
+                      text-gray-500
+                      uppercase
+                      tracking-wider
+                      text-center
+                    "
+                  >
+                    Status
+                  </th>
+                  <th
+                    scope="col"
+                    class="
+                      px-6
+                      py-3
+                      text-left text-xs
+                      font-medium
+                      text-gray-500
+                      uppercase
+                      tracking-wider
+                    "
+                  >
+                    Created
+                  </th>
+                  <th scope="col" class="relative px-6 py-3">
+                    <span class="sr-only">Edit</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr v-for="admin in searchResult" :key="admin.id">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="flex-shrink-0 h-10 w-10">
+                        <img
+                          v-if="admin.avatar"
+                          class="
+                            ring-2
+                            object-center object-cover
+                            rounded-full
+                            h-10
+                            w-10
+                          "
+                          :class="ringColor(admin.college.color)"
+                          :src="`${this.$baseURL + admin.avatar}`"
+                        />
+                        <img
+                          v-else
+                          class="
+                            ring-2
+                            object-center object-cover
+                            rounded-full
+                            h-10
+                            w-10
+                          "
+                          :class="ringColor(admin.college.color)"
+                          :src="`https://avatars.dicebear.com/api/initials/${admin.fname}.svg?background=%23bcbcbc`"
+                          alt=""
+                        />
+                      </div>
+                      <div class="ml-4">
+                        <div class="text-sm font-medium text-gray-900">
+                          {{ admin.fname }} {{ admin.lname }}
+                        </div>
+                        <div class="text-xs text-gray-500">
+                          {{ admin.email }}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">
+                      {{ admin.position }}
+                    </div>
+                    <div class="text-xs text-gray-500">
+                      {{ admin.college.name }}
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-center">
+                    <span
+                      v-if="admin.email_verified_at"
+                      class="
+                        px-2
+                        inline-flex
+                        text-xs
+                        leading-5
+                        font-semibold
+                        rounded-full
+                        bg-green-100
+                        text-green-800
+                      "
+                    >
+                      Verified
+                    </span>
+                    <span
+                      v-else
+                      class="
+                        px-2
+                        inline-flex
+                        text-xs
+                        leading-5
+                        font-semibold
+                        rounded-full
+                        bg-yellow-100
+                        text-yellow-800
+                      "
+                    >
+                      Unverified
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
+                    {{ createdDate(admin.created_at) }}
+                  </td>
+                  <td
+                    class="
+                      px-6
+                      py-4
+                      whitespace-nowrap
+                      text-right text-sm
+                      font-medium
+                    "
+                  >
+                    <div
+                      v-if="position.toLowerCase() === 'admin'"
+                      class="flex w-full justify-end"
+                    >
+                      <router-link
+                        :to="{ name: 'EditAdmin', params: { id: admin.id } }"
+                      >
+                        <pencil-icon
+                          class="w-5 h-5 text-gray-500 hover:text-blue-500"
+                        ></pencil-icon>
+                      </router-link>
+                      <button @click="remove(admin)">
+                        <trash-icon
+                          class="w-5 h-5 text-gray-500 hover:text-red-500"
+                        ></trash-icon>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -150,6 +263,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Trash from "./Trash.vue";
+import timeAgo from "../../includes/timeAgo";
 import {
   SearchIcon,
   PlusIcon,
@@ -208,7 +322,11 @@ export default {
     ...mapActions(["getAllAdmins", "adminMoveToTrash"]),
     ringColor: (color) => `ring-${color}-400`,
     bgColor: (color) => `bg-${color}-500`,
-
+    createdDate(date) {
+      // Create formatter (English).
+      var temp = new Date(date);
+      return timeAgo.format(temp, "round");
+    },
     remove(admin) {
       this.adminMoveToTrash(admin);
     },

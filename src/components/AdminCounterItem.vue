@@ -2,8 +2,8 @@
   <div class="flex p-12 md:p-8 h-32 w-full items-center bg-white rounded-md">
     <div
       class="
-        w-16
-        h-16
+        w-12
+        h-12
         flex
         items-center
         justify-center

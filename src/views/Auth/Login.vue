@@ -208,12 +208,11 @@ export default {
   methods: {
     ...mapActions(["login"]),
     async submitLogin(values) {
-      values.device_name = "Web";
-
       const deviceDetector = new DeviceDetector();
       const device = deviceDetector.parse(navigator.userAgent);
 
-      console.log(device);
+      values.device_name =
+        device.os.name + " " + device.os.version + " " + device.client.name;
 
       await this.login(values);
     },
