@@ -207,7 +207,7 @@
                     font-medium
                     rounded-md
                     text-white
-                    bg-green-400
+                    bg-secondary
                     hover:bg-green-600
                     focus:outline-none
                     focus:ring-2

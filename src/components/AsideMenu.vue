@@ -3,12 +3,12 @@
     class="
       flex flex-col
       w-full
-      md:w-60
+      lg:w-60
       text-gray-700
       bg-white
       dark-mode:text-gray-200 dark-mode:bg-gray-800
       flex-shrink-0
-      md:h-screen md:sticky md:top-0
+      lg:h-screen lg:sticky lg:top-0
     "
   >
     <div
@@ -29,7 +29,7 @@
         >URSB App</a
       >
       <button
-        class="md:hidden rounded-lg focus:outline-none focus:shadow-outline"
+        class="lg:hidden rounded-lg focus:outline-none focus:shadow-outline"
         @click="toggle"
       >
         <svg
@@ -54,7 +54,7 @@
     </div>
     <nav
       :class="{ block: open, hidden: !open }"
-      class="flex-grow md:block pb-4 md:pb-0 md:overflow-y-auto"
+      class="flex-grow lg:block pb-4 lg:pb-0 lg:overflow-y-auto"
     >
       <!-- logo -->
       <div class="mx-7 block">

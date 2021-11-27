@@ -1,5 +1,7 @@
 import http from "@/includes/http.js";
 import { notify } from "@kyvg/vue3-notification";
+import router from "@/router/index.js";
+
 const state = {
   admins: [],
   adminErrors: null,
@@ -128,11 +130,15 @@ const actions = {
         payload,
         config
       );
+
       notify({
-        group: "admin",
-        title: "Admin Successfully Updated",
-        text: res.data.message,
-        type: "success",
+        group: "no_button",
+        title: "Success",
+        max: 1,
+        data: {
+          type: "success",
+          message: res.data.message,
+        },
       });
 
       return true;
@@ -153,15 +159,19 @@ const actions = {
         "content-type": "multipart/form-data",
       },
     };
-    console.log(payload);
     try {
       const res = await http.post("api/admin/register", payload, config);
       notify({
-        group: "admin",
-        title: "College Successfully Added",
-        text: res.data.message,
-        type: "success",
+        group: "no_button",
+        title: "Success",
+        max: 1,
+        data: {
+          type: "success",
+          message: res.data.message,
+        },
       });
+
+      router.push({ name: "Admins" });
 
       return true;
     } catch (ex) {
@@ -181,10 +191,13 @@ const actions = {
       const i = state.adminTrash.map((item) => item.id).indexOf(id);
       state.adminTrash.splice(i, 1);
       notify({
-        group: "admin",
-        title: "Admin Deleted",
-        text: res.data.message,
-        type: "success",
+        group: "no_button",
+        title: "Deleted",
+        max: 1,
+        data: {
+          type: "trash",
+          message: res.data.message,
+        },
       });
 
       return true;

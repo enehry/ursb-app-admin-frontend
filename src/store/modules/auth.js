@@ -31,7 +31,7 @@ const actions = {
       console.log(res);
       commit("setToken", res.data.token);
       const user = await http.get("api/admin/me");
-      commit("setUserData", user.data.admin);
+      commit("setUserData", user.data.user);
       router.push({ name: "Home" });
     } catch (ex) {
       if (ex.response.status == 422) {
@@ -52,7 +52,11 @@ const actions = {
     commit("setLoading", true);
     try {
       const res = await http.post("api/admin/verifyCode", { code: payload });
-      commit("setUserData", res.data.user);
+      localStorage.removeItem("userData");
+      // refetch user data
+      const user = await http.get("api/admin/me");
+      commit("setUserData", user.data.user);
+      console.log(res.data.user);
       router.push({ name: "Home" });
     } catch (ex) {
       if (ex.response.status == 422) {
@@ -75,8 +79,25 @@ const actions = {
       commit("setUserData", user);
     }
   },
-  logout({ commit }) {
-    commit("clearUserData");
+  async logout({ commit }) {
+    try {
+      const res = await http.get("api/admin/logout");
+      if (res.data.success) {
+        commit("clearUserData");
+      }
+    } catch (ex) {
+      if (ex.response.status == 422) {
+        console.log(ex.response.data);
+        commit("setErrors", ex.response.data.errors);
+        notify({
+          group: "auth",
+          title: "Log Out Error",
+          text: ex.response.data.errors,
+          type: "error",
+        });
+      }
+      console.log(ex.response.data);
+    }
   },
 };
 
@@ -101,7 +122,8 @@ const mutations = {
   },
 
   clearUserData() {
-    localStorage.removeItem("user");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("token");
     location.reload();
   },
 };
