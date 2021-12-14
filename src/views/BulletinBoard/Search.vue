@@ -1,4 +1,24 @@
 <template>
+  <div class="max-w-xl mx-auto mb-2">
+    <div class="sm:px-0 px-8">
+      <h1 class="bulletin-board uppercase text-gray-700 text-sm font-bold">
+        Bulletin Board
+      </h1>
+      <h2 class="text-gray-400 text-xs mb-8">
+        Posting announcements here will reflect to the student mobile app
+        depending to their course.
+      </h2>
+    </div>
+
+    <div class="w-full flex justify-end px-4 gap-1">
+      <user-circle-icon
+        class="w-6 h-6 text-gray-400 hover:text-green-500 cursor-pointer"
+      ></user-circle-icon>
+      <archive-icon
+        class="w-6 h-6 text-gray-400 hover:text-yellow-400 cursor-pointer"
+      ></archive-icon>
+    </div>
+  </div>
   <div
     class="
       flex
@@ -11,6 +31,8 @@
       shadow-md
       rounded-md
       px-4
+      max-w-xl
+      mx-auto
     "
   >
     <div
@@ -150,12 +172,14 @@
 </template>
 
 <script>
-import { FilterIcon } from "@heroicons/vue/solid";
+import { FilterIcon, ArchiveIcon, UserCircleIcon } from "@heroicons/vue/solid";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Search",
   components: {
     FilterIcon,
+    ArchiveIcon,
+    UserCircleIcon,
   },
   data() {
     return {

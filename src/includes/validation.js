@@ -37,12 +37,12 @@ export default {
     configure({
       generateMessage: (context) => {
         const messages = {
-          required: `The field ${context.field} is required.`,
+          required: `The ${context.field} is required.`,
           min: `The field ${context.field} is too short.`,
           max: `The field ${context.field} is too long.`,
-          alpha_spaces: `The field ${context.field} may only contain alphabet character.`,
-          min_value: `The field ${context.field} is too low.`,
-          max_value: `The field ${context.field} is too high.`,
+          alpha_spaces: `The ${context.field} may only contain alphabet character.`,
+          min_value: `The ${context.field} is too low.`,
+          max_value: `The ${context.field} is too high.`,
           password_mismatch: "The passwords don't match",
           tos: "You must accept the Terms of Service",
         };

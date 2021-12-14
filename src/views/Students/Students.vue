@@ -1,7 +1,9 @@
 <template>
   <div class="heading mb-4 ml-2">
-    <div class="student uppercase font-medium">students</div>
-    <small class="text-xs font-light"
+    <div class="student uppercase font-bold text-gray-700 text-sm">
+      students
+    </div>
+    <small class="text-xs font-light text-gray-400"
       >View, ban and permanently delete registered students in the mobile
       app.</small
     >

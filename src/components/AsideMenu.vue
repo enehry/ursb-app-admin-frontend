@@ -88,7 +88,7 @@
       </div>
       <hr class="border-2" />
       <!-- nav -->
-      <div class="pl-2">
+      <div class="p-2">
         <router-link
           v-for="menu in menus"
           :key="menu.routeName"

@@ -1,8 +1,8 @@
 <template>
-  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12">
-    <div class="text-center pb-12">
-      <h2 class="text-md font-bold uppercase text-gray-600">Admins</h2>
-      <h6 class="text-sm text-gray-400">
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4">
+    <div class="pb-12">
+      <h2 class="text-sm font-bold uppercase text-gray-700">Admins</h2>
+      <h6 class="text-xs text-gray-400">
         Manage admins. You can register, view and delete admins on this page.
       </h6>
     </div>

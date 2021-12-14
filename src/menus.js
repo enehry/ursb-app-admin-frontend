@@ -7,7 +7,7 @@ const menus = [
   { menuName: "E-Prospectus", routeName: "EProspectus" },
   // { menuName: "Organization", routeName: "Organization" },
   // { menuName: "Faculty", routeName: "Faculty" },
-  { menuName: "About", routeName: "About" },
+  // { menuName: "About", routeName: "About" },
   { menuName: "Settings", routeName: "Settings" },
 ];
 

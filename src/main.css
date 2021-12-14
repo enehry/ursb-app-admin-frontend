@@ -4,6 +4,7 @@
 
 .router-link-exact-active.menuItem-active-link {
   @apply text-green-600 font-bold;
+  @apply hover:text-white;
 }
 
 @layer base {
