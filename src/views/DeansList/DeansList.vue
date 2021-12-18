@@ -4,8 +4,10 @@
       title="Dean's List"
       description="Verify student file for applying deans list"
     />
-    <div class="block lg:flex content-center items-center w-full mb-5">
-      <div class="mb-2 pt-2 flex content-center items-center text-gray-600">
+    <div class="block lg:flex content-center items-center w-full mb-1">
+      <div
+        class="w-full mb-2 pt-2 flex content-center items-center text-gray-600"
+      >
         <input
           class="
             border-2 border-gray-300
@@ -13,7 +15,6 @@
             px-5
             pr-8
             w-full
-            lg:w-80
             h-10
             rounded-lg
             text-xs
@@ -29,57 +30,108 @@
           <search-icon></search-icon>
         </button>
       </div>
-
-      <div class="flex w-full gap-2 items-center justify-between">
-        <div class="flex flex-row gap-1">
-          <select v-model="filter" class="px-2 py-2 border rounded-md text-xs">
-            <option value="" selected disabled>Sort by</option>
-            <option value="desc">Older first</option>
-            <option value="asc">Newest first</option>
-            <option value="asc">QPA</option>
-          </select>
-          <select v-model="college" class="px-2 py-2 border rounded-md text-xs">
-            <option value="" selected disabled>Course</option>
-            <option value="desc">All</option>
-            <option value="asc">BSIT</option>
-            <option value="asc">BSIT</option>
-          </select>
+      <div class="">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-1">
+          <div>
+            <select
+              v-model="filter"
+              class="w-full px-2 py-2 border rounded-md text-xs"
+            >
+              <option value="" selected disabled>Sort by</option>
+              <option value="desc">Older first</option>
+              <option value="asc">Newest first</option>
+              <option value="asc">QPA</option>
+            </select>
+          </div>
+          <div>
+            <select
+              v-model="college"
+              class="w-full px-2 py-2 border rounded-md text-xs"
+            >
+              <option value="" selected disabled>Course</option>
+              <option value="desc">All</option>
+              <option value="asc">BSIT</option>
+              <option value="asc">BSIT</option>
+            </select>
+          </div>
+          <div>
+            <select
+              v-model="status"
+              class="w-full px-2 py-2 border rounded-md text-xs"
+            >
+              <option value="" selected disabled>Status</option>
+              <option value="desc">Pending</option>
+              <option value="asc">Rejected</option>
+              <option value="asc">Approved</option>
+            </select>
+          </div>
+          <div>
+            <select
+              v-model="academicYear"
+              class="w-full px-2 py-2 border rounded-md text-xs"
+            >
+              <option value="" selected disabled>Academic Year</option>
+              <option value="desc">2020-2021</option>
+              <option value="asc">2019-2020</option>
+            </select>
+          </div>
         </div>
-
-        <!-- switch -->
-        <div class="">
-          <div class="w-full h-full flex flex-row justify-center items-center">
+      </div>
+    </div>
+    <div class="mb-4 w-full flex justify-between">
+      <!-- switch -->
+      <div class="">
+        <div class="w-full h-full flex flex-row justify-center items-center">
+          <div class="flex justify-center items-center">
+            <!-- Switch Container -->
+            <div
+              :class="toggleActive ? 'bg-green-500' : 'bg-gray-300'"
+              class="w-11 h-6 flex items-center rounded-full mx-3 px-1"
+              @click="handleToggleActive"
+            >
+              <!-- Switch -->
+              <div
+                class="
+                  bg-white
+                  w-4
+                  h-4
+                  rounded-full
+                  shadow-md
+                  transform
+                  transition
+                  duration-15
+                "
+                :class="{ 'translate-x-5': toggleActive }"
+              ></div>
+            </div>
             <div class="">
               <p class="text-xs text-gray-500">
                 Open the application for dean's list
               </p>
             </div>
-            <div class="flex justify-center items-center">
-              <!-- Switch Container -->
-              <div
-                :class="toggleActive ? 'bg-green-500' : 'bg-gray-300'"
-                class="w-11 h-6 flex items-center rounded-full mx-3 px-1"
-                @click="handleToggleActive"
-              >
-                <!-- Switch -->
-                <div
-                  class="
-                    bg-white
-                    w-4
-                    h-4
-                    rounded-full
-                    shadow-md
-                    transform
-                    transition
-                    duration-15
-                  "
-                  :class="{ 'translate-x-5': toggleActive }"
-                ></div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
+      <button
+        class="
+          px-3
+          py-2
+          rounded-md
+          shadow-md
+          text-xs
+          font-medium
+          uppercase
+          text-white
+          hover:bg-green-700
+          bg-green-500
+          flex
+          items-center
+          gap-1
+        "
+      >
+        <document-download-icon class="w-5 h-5"></document-download-icon>
+        Export to Excel
+      </button>
     </div>
     <div class="flex flex-col">
       <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -250,11 +302,12 @@
 
 <script>
 import Header from "../../components/Header.vue";
-import { SearchIcon } from "@heroicons/vue/solid";
+import { SearchIcon, DocumentDownloadIcon } from "@heroicons/vue/solid";
 export default {
   components: {
     Header,
     SearchIcon,
+    DocumentDownloadIcon,
   },
   data() {
     return {
@@ -262,11 +315,14 @@ export default {
       toggleActive: false,
       keyword: "",
       college: "",
+      status: "",
+      academicYear: "",
     };
   },
   methods: {
     handleToggleActive() {
       this.toggleActive = !this.toggleActive;
+      console.log(this.$user);
     },
   },
 };

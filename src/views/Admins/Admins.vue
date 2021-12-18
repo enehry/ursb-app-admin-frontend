@@ -40,7 +40,7 @@
           <option value="col">College</option>
         </select>
         <div
-          v-if="position.toLowerCase() === 'admin'"
+          v-if="role.toLowerCase() === 'admin'"
           class="actions flex gap-2 items-center content-center justify-center"
         >
           <trash></trash>
@@ -103,7 +103,7 @@
                       tracking-wider
                     "
                   >
-                    Position
+                    Role
                   </th>
                   <th
                     scope="col"
@@ -181,8 +181,8 @@
                     </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">
-                      {{ admin.position }}
+                    <div class="text-sm uppercase font-medium text-gray-900">
+                      {{ admin.role }}
                     </div>
                     <div class="text-xs text-gray-500">
                       {{ admin.college.name }}
@@ -233,7 +233,7 @@
                     "
                   >
                     <div
-                      v-if="position.toLowerCase() === 'admin'"
+                      v-if="role.toLowerCase() === 'admin'"
                       class="flex w-full justify-end"
                     >
                       <router-link
@@ -291,7 +291,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["admins", "position"]),
+    ...mapGetters(["admins", "role"]),
     searchResult() {
       let admins = this.searched;
 

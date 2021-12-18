@@ -67,7 +67,9 @@
             h-16
             ring ring-offset-base-100 ring-offset-2
           "
-          :class="`ring-${userData.college.color}-500`"
+          :class="`ring-${
+            userData.college ? userData.college.color : 'gray'
+          }-500`"
         >
           <img
             v-if="userData.avatar"
@@ -81,33 +83,34 @@
             alt=""
           />
         </div>
-        <h3 class="text-md font-bold">{{ fullName }}</h3>
+        <h3 class="text-md font-bold leading-snug mb-1">{{ fullName }}</h3>
         <h6 class="text-xs">{{ email }}</h6>
-        <h6 class="text-xs">{{ position }}</h6>
+        <h6 class="text-xs uppercase">{{ role }}</h6>
         <h3 class="text-md mt-4 font-bold">Menu</h3>
       </div>
       <hr class="border-2" />
       <!-- nav -->
       <div class="p-2">
-        <router-link
-          v-for="menu in menus"
-          :key="menu.routeName"
-          :to="{ name: `${menu.routeName}` }"
-          href="#"
-          class="
-            menuItem-active-link
-            block
-            py-2.5
-            px-4
-            rounded
-            transition
-            duration-200
-            text-sm
-            hover:bg-green-600 hover:text-white
-          "
-        >
-          {{ menu.menuName }}
-        </router-link>
+        <div v-for="menu in menus" :key="menu.routeName">
+          <router-link
+            v-if="menu.role.includes(role)"
+            :to="{ name: `${menu.routeName}` }"
+            href="#"
+            class="
+              menuItem-active-link
+              block
+              py-2.5
+              px-4
+              rounded
+              transition
+              duration-200
+              text-sm
+              hover:bg-green-600 hover:text-white
+            "
+          >
+            {{ menu.menuName }}
+          </router-link>
+        </div>
       </div>
     </nav>
   </div>
@@ -127,7 +130,7 @@ export default {
   },
   components: {},
   computed: {
-    ...mapGetters(["userData", "fullName", "email", "position"]),
+    ...mapGetters(["userData", "fullName", "email", "role"]),
   },
   methods: {
     toggle() {

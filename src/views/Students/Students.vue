@@ -10,6 +10,29 @@
   </div>
 
   <div class="container w-full mx-auto px-2">
+    <div class="buttons flex flex-row justify-end mb-4">
+      <div>
+        <button
+          class="
+            bg-green-500
+            hover:bg-green-700
+            text-white
+            font-medium
+            uppercase
+            text-xs
+            py-2
+            px-4
+            rounded-md
+            shadow-md
+            flex
+            gap-1
+          "
+        >
+          <upload-icon class="w-4 h-4"></upload-icon>
+          Import Students
+        </button>
+      </div>
+    </div>
     <!--Card-->
     <div
       v-show="!loading"
@@ -23,7 +46,6 @@
             <th class="text-center">Avatar</th>
             <th>stud #</th>
             <th>Name</th>
-            <th class="text-left">Verified</th>
             <th class="text-center">Course</th>
             <th class="text-center">Actions</th>
           </tr>
@@ -53,20 +75,7 @@
               <div>{{ student.fname + " " + student.lname }}</div>
               <div>{{ student.email }}</div>
             </td>
-            <td class="text-center">
-              <div
-                v-if="student.email_verified_at"
-                class="bg-green-400 w-min py-1 px-2 text-white rounded-md"
-              >
-                verified
-              </div>
-              <div
-                v-else
-                class="bg-red-400 w-min py-1 px-2 text-white rounded-md"
-              >
-                unverified
-              </div>
-            </td>
+
             <td class="text-center">
               <div>{{ student.course.abbr }}</div>
               <div>{{ student.course.college.abbr }}</div>
@@ -104,7 +113,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { TrashIcon } from "@heroicons/vue/solid";
+import { TrashIcon, UploadIcon } from "@heroicons/vue/solid";
 
 import JQ from "jquery";
 
@@ -112,6 +121,7 @@ export default {
   name: "Students",
   components: {
     TrashIcon,
+    UploadIcon,
   },
   async created() {
     await this.getAllStudents();

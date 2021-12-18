@@ -517,7 +517,7 @@ export default {
       data.append("lname", values.lname);
       data.append("id", this.admin.id);
 
-      data.append("position", values.position);
+      data.append("role", values.position);
 
       if (await this.updateAdmin(data)) {
         this.isOk = true;
@@ -540,7 +540,7 @@ export default {
       ).course;
     },
     changeUserType() {
-      if (this.userType === "Admin") {
+      if (this.userType === "admin") {
         this.course = null;
       }
     },

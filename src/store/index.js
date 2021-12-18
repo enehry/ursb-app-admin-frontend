@@ -6,6 +6,7 @@ import admin from "./modules/admin";
 import students from "./modules/students";
 import bulletinBoard from "./modules/bulletingBoard";
 import prospectus from "./modules/prospectus";
+import settings from "./modules/settings";
 
 export default createStore({
   modules: {
@@ -16,5 +17,6 @@ export default createStore({
     students,
     bulletinBoard,
     prospectus,
+    settings,
   },
 });

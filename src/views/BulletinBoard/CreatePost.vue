@@ -19,6 +19,39 @@
       "
       :validation-schema="postSchema"
     >
+      <div class="choices mb-2 w-full">
+        <div class="flex flex-row items-center gap-2 justify-end">
+          <label class="text-xs text-gray-400" for=""> Show to : </label>
+          <button
+            class="
+              text-xs
+              bg-green-500
+              px-2
+              py-1
+              hover:bg-green-700
+              rounded-full
+              text-white
+              uppercase
+            "
+          >
+            BSIT
+          </button>
+          <button
+            class="
+              text-xs
+              bg-green-500
+              px-2
+              py-1
+              hover:bg-green-700
+              rounded-full
+              text-white
+              uppercase
+            "
+          >
+            BSIS
+          </button>
+        </div>
+      </div>
       <vee-field
         class="
           title

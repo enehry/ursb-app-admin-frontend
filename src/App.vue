@@ -21,9 +21,10 @@ export default {
     PopupNotification,
   },
   name: "App",
-  created() {
-    this.initializeUserData();
+  async created() {
+    await this.initializeUserData();
   },
+  computed: {},
   methods: {
     ...mapActions(["initializeUserData"]),
   },

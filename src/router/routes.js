@@ -123,7 +123,9 @@ const routes = [
         path: "/organization",
         name: "Organization",
         component: () =>
-          import(/* webpackChunkName: "home" */ "../views/Organization.vue"),
+          import(
+            /* webpackChunkName: "home" */ "../views/Organizations/Organization.vue"
+          ),
       },
       {
         path: "/settings",

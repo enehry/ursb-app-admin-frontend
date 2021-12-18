@@ -236,7 +236,6 @@
                       <vee-field
                         type="email"
                         name="email"
-                        autocomplete="given-name"
                         class="
                           py-2
                           px-3
@@ -315,8 +314,8 @@
                         <option value="" selected disabled>
                           Select user type
                         </option>
-                        <option value="Admin">ADMIN</option>
-                        <option value="Program Head">PROGRAM HEAD</option>
+                        <option value="dean">Dean</option>
+                        <option value="program head">Program Head</option>
                       </vee-field>
                       <ErrorMessage class="text-red-600 text-xs" name="type" />
                     </div>
@@ -369,7 +368,7 @@
                         >Course</label
                       >
                       <vee-field
-                        :disabled="userType !== 'Program Head'"
+                        :disabled="userType !== 'program head'"
                         as="select"
                         v-model="course"
                         name="course"
@@ -561,7 +560,7 @@ export default {
       data.append("lname", values.lname);
       data.append("email", values.email);
       data.append("password", values.password);
-      data.append("position_name", values.type);
+      data.append("role", values.type);
 
       if (await this.register(data)) {
         this.isOk = true;

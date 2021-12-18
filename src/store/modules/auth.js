@@ -19,7 +19,7 @@ const getters = {
     return `${user.fname} ${user.mname} ${user.lname}`;
   },
   email: (state) => state.userData.email,
-  position: () => state.userData.position,
+  role: () => state.userData.role,
 };
 
 const actions = {
@@ -31,7 +31,7 @@ const actions = {
       console.log(res);
       commit("setToken", res.data.token);
       const user = await http.get("api/admin/me");
-      commit("setUserData", user.data.user);
+      commit("setUserData", user.data);
       router.push({ name: "Home" });
     } catch (ex) {
       if (ex.response.status == 422) {
@@ -51,12 +51,11 @@ const actions = {
   async verifyUserCode({ commit }, payload) {
     commit("setLoading", true);
     try {
-      const res = await http.post("api/admin/verifyCode", { code: payload });
+      await http.post("api/admin/verifyCode", { code: payload });
       localStorage.removeItem("userData");
       // refetch user data
       const user = await http.get("api/admin/me");
       commit("setUserData", user.data.user);
-      console.log(res.data.user);
       router.push({ name: "Home" });
     } catch (ex) {
       if (ex.response.status == 422) {
@@ -115,6 +114,7 @@ const mutations = {
   setUserData(state, userData) {
     state.userData = userData;
     localStorage.setItem("userData", JSON.stringify(userData));
+    this.$user = userData;
   },
 
   setErrors(state, value) {
