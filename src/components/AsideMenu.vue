@@ -74,7 +74,7 @@
           <img
             v-if="userData.avatar"
             class="object-cover rounded-full w-full h-full"
-            :src="`http://127.0.0.1:8000${this.userData.avatar}`"
+            :src="`${this.$baseURL}${this.userData.avatar}`"
           />
           <img
             v-else

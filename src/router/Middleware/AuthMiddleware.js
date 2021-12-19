@@ -1,5 +1,7 @@
+import ls from "@/includes/secure_storage.js";
+
 export default (to, from, next) => {
-  if (to.name !== "Login" && !localStorage.getItem("token")) {
+  if (to.name !== "Login" && !ls.get("token")) {
     console.log(to.name);
     next({ name: "Login" });
     return false;

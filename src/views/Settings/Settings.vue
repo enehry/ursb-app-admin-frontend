@@ -11,6 +11,12 @@
     </div>
   </div>
   <deans-list></deans-list>
+  <div class="hidden sm:block" aria-hidden="true">
+    <div class="py-5">
+      <div class="border-t border-gray-200" />
+    </div>
+  </div>
+  <browser-sessions></browser-sessions>
   <div class="float-right">
     <button
       @click="logout"
@@ -38,6 +44,8 @@ import PersonalInfo from "./PersonalInfo.vue";
 import DeansList from "./DeansListSettings.vue";
 import ChangePassword from "./ChangePassword.vue";
 import Header from "../../components/Header.vue";
+import BrowserSessions from "./BrowserSessions.vue";
+
 import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
@@ -46,6 +54,7 @@ export default {
     DeansList,
     ChangePassword,
     Header,
+    BrowserSessions,
   },
   data() {
     return {};

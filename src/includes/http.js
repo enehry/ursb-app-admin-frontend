@@ -1,5 +1,6 @@
 import axios from "axios";
 import router from "../router/index";
+import ls from "../includes/secure_storage.js";
 
 const http = axios.create({
   baseURL: "http://127.0.0.1:8000/",
@@ -14,7 +15,7 @@ const http = axios.create({
 
 http.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = ls.get("token");
     if (token) {
       config.headers["Authorization"] = "Bearer " + token;
     }
@@ -33,8 +34,7 @@ http.interceptors.response.use(
   function (error) {
     if (error.response.status === 401) {
       router.push("/login");
-      localStorage.removeItem("token");
-      localStorage.removeItem("userData");
+      ls.removeAll();
       return Promise.reject(error);
     }
 

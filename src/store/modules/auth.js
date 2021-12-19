@@ -1,6 +1,7 @@
 import http from "@/includes/http.js";
 import { notify } from "@kyvg/vue3-notification";
 import router from "@/router/index.js";
+import ls from "@/includes/secure_storage.js";
 
 const state = {
   token: null,
@@ -52,7 +53,7 @@ const actions = {
     commit("setLoading", true);
     try {
       await http.post("api/admin/verifyCode", { code: payload });
-      localStorage.removeItem("userData");
+      ls.remove("userData");
       // refetch user data
       const user = await http.get("api/admin/me");
       commit("setUserData", user.data.user);
@@ -73,7 +74,7 @@ const actions = {
     commit("setLoading", false);
   },
   initializeUserData({ commit }) {
-    const user = JSON.parse(localStorage.getItem("userData"));
+    const user = ls.get("userData");
     if (user) {
       commit("setUserData", user);
     }
@@ -102,9 +103,9 @@ const actions = {
 
 const mutations = {
   setToken(state, token) {
-    state.token = token;
-    localStorage.setItem("token", token);
     http.defaults.headers.common.Authorization = `Bearer ${token}`;
+    state.token = token;
+    ls.set("token", token);
   },
 
   setLoading(state, value) {
@@ -113,7 +114,7 @@ const mutations = {
 
   setUserData(state, userData) {
     state.userData = userData;
-    localStorage.setItem("userData", JSON.stringify(userData));
+    ls.set("userData", userData);
     this.$user = userData;
   },
 
@@ -122,8 +123,7 @@ const mutations = {
   },
 
   clearUserData() {
-    localStorage.removeItem("userData");
-    localStorage.removeItem("token");
+    ls.removeAll();
     location.reload();
   },
 };

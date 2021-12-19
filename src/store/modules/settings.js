@@ -1,13 +1,16 @@
 import http from "@/includes/http.js";
 import { notify } from "@kyvg/vue3-notification";
+import router from "@/router/index.js";
 
 const state = {
   updateUserData: null,
   changeOwnPasswordError: null,
+  browserSessions: [],
 };
 const getters = {
   updateUserData: (state) => state.updateUserData,
   changeOwnPasswordError: (state) => state.changeOwnPasswordError,
+  browserSessions: (state) => state.browserSessions,
 };
 const mutations = {
   setUpdateUserData(state, user) {
@@ -16,8 +19,51 @@ const mutations = {
   setChangeOwnPasswordError(state, error) {
     state.changeOwnPasswordError = error;
   },
+  setBrowserSessions(state, sessions) {
+    state.browserSessions = sessions;
+  },
 };
 const actions = {
+  async logoutAllBrowserSessions({ commit }) {
+    try {
+      const res = await http.get("api/admin/browser-sessions/logout/all");
+      notify({
+        group: "no_button",
+        title: "Success",
+        max: 1,
+        data: {
+          type: "success",
+          message: res.data.message,
+        },
+      });
+      commit("setBrowserSessions", []);
+      localStorage.clear();
+      router.push({ name: "Login" });
+    } catch (ex) {
+      if (ex.response) {
+        if (ex.response.status == 422) {
+          console.log(ex.response.data);
+        }
+      }
+      console.log(ex.response);
+      return false;
+    }
+  },
+  async getAllBrowserSessions({ commit }) {
+    try {
+      const res = await http.get("api/admin/browser-sessions");
+      commit("setBrowserSessions", res.data);
+      return true;
+    } catch (ex) {
+      if (ex.response) {
+        if (ex.response.status == 422) {
+          console.log(ex.response.data);
+        }
+      }
+      console.log(ex.response);
+      return false;
+    }
+  },
   async updateProfileInfo({ commit }, payload) {
     const config = {
       headers: {
@@ -55,7 +101,6 @@ const actions = {
     }
   },
   async changeOwnPassword({ commit }, payload) {
-    console.log(payload);
     try {
       const res = await http.post(
         "api/admin/profile-info/change-password",
