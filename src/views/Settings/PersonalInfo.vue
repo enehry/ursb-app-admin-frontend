@@ -284,7 +284,7 @@ export default {
       data.append("fname", values.fname);
       data.append("mname", values.mname);
       data.append("lname", values.lname);
-      if (this.selectedAvatar[0]) data.append("avatar", this.selectedAvatar[0]);
+      if (this.selectedAvatar) data.append("avatar", this.selectedAvatar[0]);
 
       this.updateProfileInfo(data);
     },

@@ -339,6 +339,7 @@
                           w-full
                           py-2
                           px-3
+                          mt-1
                           text-gray-800
                           bg-white
                           border border-gray-300
@@ -481,16 +482,12 @@
                       px-4
                       border border-transparent
                       shadow-sm
-                      text-sm
+                      text-xs
                       font-medium
-                      rounded-md
+                      rounded-full
                       text-white
-                      bg-green-400
-                      hover:bg-green-600
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-offset-2
-                      focus:ring-green-600
+                      bg-gray-800
+                      hover:bg-gray-600
                     "
                   >
                     Save

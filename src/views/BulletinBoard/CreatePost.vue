@@ -2,6 +2,9 @@
   <div class="create-post mb-2 mx-auto max-w-xl">
     <vee-form
       ref="postForm"
+      :initial-values="{
+        courses,
+      }"
       @submit="onSubmit"
       class="
         editor
@@ -22,34 +25,37 @@
       <div class="choices mb-2 w-full">
         <div class="flex flex-row items-center gap-2 justify-end">
           <label class="text-xs text-gray-400" for=""> Show to : </label>
-          <button
-            class="
-              text-xs
-              bg-green-500
-              px-2
-              py-1
-              hover:bg-green-700
-              rounded-full
-              text-white
-              uppercase
-            "
+          <div
+            v-for="course in coursesForPosting"
+            :key="course.id"
+            class="flex items-center"
           >
-            BSIT
-          </button>
-          <button
-            class="
-              text-xs
-              bg-green-500
-              px-2
-              py-1
-              hover:bg-green-700
-              rounded-full
-              text-white
-              uppercase
-            "
-          >
-            BSIS
-          </button>
+            <vee-field
+              class="
+                h-3
+                w-3
+                focus:ring-0
+                rounded-md
+                bg-white
+                transition
+                duration-200
+                cursor-pointer
+                form-checkbox
+                mr-1
+              "
+              type="checkbox"
+              :value="course.id"
+              name="courses"
+            />
+            <label class="font-medium text-xs text-gray-800" for="">{{
+              course.abbr
+            }}</label>
+          </div>
+          <ErrorMessage
+            v-if="!isLoading"
+            class="text-red-500 text-xs"
+            name="courses"
+          />
         </div>
       </div>
       <vee-field
@@ -148,7 +154,7 @@
 
 <script>
 import { PaperAirplaneIcon, XCircleIcon } from "@heroicons/vue/solid";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "CreatePost",
   components: {
@@ -157,6 +163,7 @@ export default {
   },
   data() {
     return {
+      courses: [],
       body: "",
       title: "",
       images: null,
@@ -164,11 +171,21 @@ export default {
         image: "mimes:image/jpg,png,jpeg",
         title: "required",
         body: "required",
+        courses: "required",
       },
       isLoading: false,
     };
   },
+  async created() {
+    if (this.coursesForPosting.length <= 0) {
+      this.isLoading = true;
+      await this.getCoursesForPosting();
+      this.isLoading = false;
+    }
+    this.courses = this.coursesForPosting.map((course) => course.id);
+  },
   computed: {
+    ...mapGetters(["coursesForPosting"]),
     postImage() {
       if (this.images) {
         return URL.createObjectURL(this.images[0]);
@@ -177,18 +194,20 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["createNewPost"]),
+    ...mapActions(["createNewPost", "getCoursesForPosting"]),
     async onSubmit(value) {
       this.isLoading = true;
       const formData = new FormData();
       formData.append("title", value.title);
       formData.append("body", value.body);
+      formData.append("courses", JSON.stringify(value.courses));
       if (this.images) {
         formData.append("images", this.images[0]);
       }
       await this.createNewPost(formData);
       this.$refs.postForm.resetForm();
       this.isLoading = false;
+      console.log(value);
     },
   },
 };

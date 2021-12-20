@@ -52,8 +52,7 @@
     >
       <input
         type="search"
-        name="search"
-        id="search"
+        v-model="filter.search"
         placeholder="Search"
         class="
           appearance-none
@@ -65,6 +64,7 @@
         "
       />
       <button
+        @click="filterPosts"
         type="submit"
         class="ml-1 outline-none focus:outline-none active:outline-none"
       >
@@ -82,91 +82,23 @@
       </button>
     </div>
 
-    <div class="relative">
-      <button
-        @click="showMenu"
-        class="
-          flex
-          relative
-          hover:text-green-500
-          z-10
-          rounded-md
-          bg-white
-          p-2
-          focus:outline-none
-          text-gray-500
-        "
+    <div class="ml-2 flex items-center text-gray-500 gap-1">
+      <filter-icon class="w-4 h-4"></filter-icon>
+      <span class="text-xs font-medium">Course:</span>
+      <select
+        class="text-xs px-1 border rounded-md focus:border-gray-400"
+        v-model="filter.course"
+        @change="filterPosts"
       >
-        <filter-icon class="w-4 h-4"></filter-icon>
-        <span class="uppercase text-xs font-medium">Filter</span>
-      </button>
-
-      <div
-        v-show="isMenuShow"
-        @click="showMenu"
-        class="fixed inset-0 h-full w-full z-10"
-      ></div>
-
-      <div
-        v-show="isMenuShow"
-        class="
-          absolute
-          right-0
-          mt-2
-          py-2
-          w-40
-          bg-white
-          rounded-md
-          shadow-xl
-          z-20
-        "
-      >
-        <div
-          v-for="college in collegesAndCourses"
-          :key="college.id"
-          class="block"
+        <option value="">All</option>
+        <option
+          v-for="course in coursesForPosting"
+          :key="course.id"
+          :value="course.id"
         >
-          <button
-            href="#"
-            class="
-              flex
-              gap-2
-              px-4
-              py-2
-              text-xs
-              font-bold
-              capitalize
-              text-gray-500
-              w-full
-              hover:bg-green-500 hover:text-white
-            "
-          >
-            {{ college.abbr }}
-          </button>
-          <hr class="mx-2" />
-          <div v-if="college.course">
-            <button
-              v-for="course in college.course"
-              :key="course.id"
-              href="#"
-              class="
-                flex
-                gap-2
-                px-6
-                py-2
-                text-xs
-                font-bold
-                capitalize
-                text-gray-500
-                w-full
-                hover:bg-green-500 hover:text-white
-              "
-            >
-              {{ course.abbr }}
-            </button>
-          </div>
-        </div>
-      </div>
+          {{ course.abbr }}
+        </option>
+      </select>
     </div>
   </div>
 </template>
@@ -183,20 +115,23 @@ export default {
   },
   data() {
     return {
-      isMenuShow: false,
+      filter: {
+        course: "",
+        search: "",
+      },
     };
   },
-  async created() {
-    await this.getCollegesAndCourses();
-    console.log(this.collegesAndCourses);
-  },
+  async created() {},
   computed: {
-    ...mapGetters(["collegesAndCourses"]),
+    ...mapGetters(["coursesForPosting"]),
   },
   methods: {
-    ...mapActions(["getCollegesAndCourses"]),
+    ...mapActions(["filterResult"]),
     showMenu() {
       this.isMenuShow = !this.isMenuShow;
+    },
+    filterPosts() {
+      this.filterResult(this.filter);
     },
   },
 };

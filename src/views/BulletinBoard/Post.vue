@@ -33,8 +33,17 @@
               {{ post.posted_by.fname }} {{ post.posted_by.lname }}
             </div>
             <div class="flex w-full mt-1">
-              <div class="text-blue-700 font-base text-xs mr-1 cursor-pointer">
-                {{ post.posted_by.position }}
+              <div
+                class="
+                  text-blue-700
+                  uppercase
+                  font-base
+                  text-xs
+                  mr-1
+                  cursor-pointer
+                "
+              >
+                {{ post.posted_by.role }}
               </div>
               <div class="text-gray-400 font-light text-xs">
                 • {{ timePosted(post.created_at) }}

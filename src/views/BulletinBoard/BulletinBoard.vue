@@ -119,10 +119,10 @@ export default {
       result: "",
     };
   },
-  async beforeMount() {
-    await this.getPosts();
-    console.log(this.posts);
-    console.log("create");
+  async created() {
+    if (this.posts.length <= 0) {
+      await this.getPosts();
+    }
   },
   mounted() {},
   components: {

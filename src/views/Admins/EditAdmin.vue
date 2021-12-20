@@ -258,6 +258,7 @@
                           focus:ring-green-300
                           focus:border-green-500
                           hover:border-green-600
+                          bg-gray-100
                           block
                           w-full
                           shadow-sm
@@ -309,7 +310,7 @@
                         v-model="userType"
                         v-on:change="changeUserType()"
                         as="select"
-                        name="position"
+                        name="role"
                         class="
                           text-xs
                           block
@@ -330,8 +331,8 @@
                         <option value="" selected disabled>
                           Select user type
                         </option>
-                        <option value="Admin">ADMIN</option>
-                        <option value="Program Head">PROGRAM HEAD</option>
+                        <option value="dean">Dean</option>
+                        <option value="program head">Program Head</option>
                       </vee-field>
                       <ErrorMessage class="text-red-600 text-xs" name="type" />
                     </div>
@@ -351,6 +352,7 @@
                         class="
                           text-xs
                           block
+                          mt-1
                           w-full
                           py-2
                           px-3
@@ -428,16 +430,12 @@
                       px-4
                       border border-transparent
                       shadow-sm
-                      text-sm
+                      text-xs
                       font-medium
-                      rounded-md
+                      rounded-full
                       text-white
-                      bg-green-400
-                      hover:bg-green-600
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-offset-2
-                      focus:ring-green-600
+                      bg-gray-800
+                      hover:bg-gray-600
                     "
                   >
                     Save
@@ -483,7 +481,7 @@ export default {
         image: "mimes:image/*",
         fname: "required",
         lname: "required",
-        position: "required",
+        role: "required",
         college_id: "required",
       },
     };
@@ -517,7 +515,7 @@ export default {
       data.append("lname", values.lname);
       data.append("id", this.admin.id);
 
-      data.append("role", values.position);
+      data.append("role", values.role);
 
       if (await this.updateAdmin(data)) {
         this.isOk = true;

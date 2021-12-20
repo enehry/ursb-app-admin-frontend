@@ -18,7 +18,13 @@
   <admin-modal :showModal="isShow">
     <div class="">
       <div class="flex justify-between items-center">
-        <div class="heading uppercase text-sm font-medium">Admin Trash</div>
+        <div class="flex items-center gap-2">
+          <trash-icon class="w-6 h-6 text-gray-900"></trash-icon>
+          <h2 class="heading uppercase text-gray-900 text-sm font-bold">
+            Admin Trash
+          </h2>
+        </div>
+
         <button
           class="text-xl text-primary hover:text-red-500"
           v-on:click="toggleModal()"
@@ -27,7 +33,7 @@
         </button>
       </div>
 
-      <div class="admins">
+      <div class="admins mt-2">
         <h1 class="text-sm font-medium mb-2 block">Names</h1>
 
         <div class="w-80 block mt-4 divide-y">
@@ -39,19 +45,35 @@
             >
               <div class="flex items-center">
                 <img
+                  v-if="trash.avatar"
                   class="
-                    ring-4
                     mr-2
                     object-center object-cover
+                    border-2 border-gray-500
                     rounded-full
                     h-8
                     w-8
                   "
-                  :src="`http://127.0.0.1:8000${trash.avatar}`"
+                  :src="`${this.$baseURL}${trash.avatar}`"
+                />
+                <img
+                  v-else
+                  class="
+                    mr-2
+                    object-center object-cover
+                    border-2 border-gray-500
+                    rounded-full
+                    h-8
+                    w-8
+                  "
+                  :src="`https://avatars.dicebear.com/api/initials/${trash.fname}.svg?background=%23bcbcbc`"
                 />
                 <div class="block">
                   <h3 class="text-sm">{{ trash.fname }}</h3>
-                  <p class="text-xs">CCS - ADMIN</p>
+                  <p class="text-xs">
+                    {{ trash.college.abbr }} •
+                    {{ trash.course ? trash.course.abbr : " " }}
+                  </p>
                 </div>
               </div>
               <div class="flex gap-2">
