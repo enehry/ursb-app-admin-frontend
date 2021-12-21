@@ -67,6 +67,7 @@
           p-2
           mb-2
           outline-none
+          font-medium
         "
         spellcheck="false"
         placeholder="Title"
@@ -86,6 +87,7 @@
           outline-none
           text-xs
           decoration-none
+          font-medium
         "
         maxlength="255"
         spellcheck="false"

@@ -6,6 +6,7 @@ const state = {
   admins: [],
   adminErrors: null,
   admin: null,
+  adminTrash: [],
 };
 const getters = {
   admins: (state) => state.admins,

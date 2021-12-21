@@ -14,9 +14,7 @@
       <user-circle-icon
         class="w-6 h-6 text-gray-400 hover:text-green-500 cursor-pointer"
       ></user-circle-icon>
-      <archive-icon
-        class="w-6 h-6 text-gray-400 hover:text-yellow-400 cursor-pointer"
-      ></archive-icon>
+      <archive-post></archive-post>
     </div>
   </div>
   <div
@@ -104,14 +102,16 @@
 </template>
 
 <script>
-import { FilterIcon, ArchiveIcon, UserCircleIcon } from "@heroicons/vue/solid";
+import { FilterIcon, UserCircleIcon } from "@heroicons/vue/solid";
+import ArchivePost from "./ArchivePost.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Search",
   components: {
     FilterIcon,
-    ArchiveIcon,
+
     UserCircleIcon,
+    ArchivePost,
   },
   data() {
     return {

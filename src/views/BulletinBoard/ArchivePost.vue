@@ -5,23 +5,22 @@
       flex
       justify-center
       items-center
-      bg-red-500
-      rounded-md
-      hover:bg-red-600
-      px-2
+      bg-yellow-500
+      rounded-full
+      hover:bg-yellow-600
+      px-1
       py-1
     "
   >
-    <trash-icon class="h-3 text-white"></trash-icon>
-    <span class="text-white text-xs">Trash</span>
+    <archive-icon class="h-4 text-white"></archive-icon>
   </button>
   <admin-modal :showModal="isShow">
     <div class="">
       <div class="flex justify-between items-center">
-        <div class="flex items-center gap-2">
-          <trash-icon class="w-6 h-6 text-gray-900"></trash-icon>
+        <div class="flex items-center gap-2 mr-12">
+          <archive-icon class="w-6 h-6 text-gray-900"></archive-icon>
           <h2 class="heading uppercase text-gray-900 text-sm font-bold">
-            Admin Trash
+            Archive Posts
           </h2>
         </div>
 
@@ -34,67 +33,37 @@
       </div>
 
       <div class="admins mt-2">
-        <h1 class="text-sm font-medium mb-2 block">Names</h1>
-
-        <div class="w-80 block mt-4 divide-y">
-          <div v-if="adminTrash.length > 0">
-            <div
-              v-for="trash in adminTrash"
-              :key="trash.id"
-              class="my-2 w-full flex justify-between items-center"
-            >
-              <div class="flex items-center">
-                <img
-                  v-if="trash.avatar"
-                  class="
-                    mr-2
-                    object-center object-cover
-                    border-2 border-gray-500
-                    rounded-full
-                    h-8
-                    w-8
-                  "
-                  :src="`${this.$baseURL}${trash.avatar}`"
-                />
-                <img
-                  v-else
-                  class="
-                    mr-2
-                    object-center object-cover
-                    border-2 border-gray-500
-                    rounded-full
-                    h-8
-                    w-8
-                  "
-                  :src="`https://avatars.dicebear.com/api/initials/${trash.fname}.svg?background=%23bcbcbc`"
-                />
-                <div class="block">
-                  <h3 class="text-sm">{{ trash.fname }}</h3>
-                  <p class="text-xs">
-                    {{ trash.college.abbr }} •
-                    {{ trash.course ? trash.course.abbr : " " }}
-                  </p>
-                </div>
-              </div>
-              <div class="flex gap-2">
-                <button @click.prevent="toggleDelete(trash.id)">
-                  <trash-icon class="w-5 h-5 text-red-500"></trash-icon>
-                </button>
-                <button @click.prevent="restore(trash)">
-                  <refresh-icon class="w-5 h-5 text-green-500"></refresh-icon>
-                </button>
+        <div v-if="archivePosts.length > 0">
+          <div
+            v-for="archive in archivePosts"
+            :key="archive.id"
+            class="my-2 w-full flex justify-between items-center"
+          >
+            <div class="flex items-center mr-4">
+              <div class="block">
+                <h3 class="text-sm font-medium">{{ archive.title }}</h3>
+                <p class="text-xs text-light">
+                  {{ archive.posted_by.fname }} {{ archive.posted_by.lname }} •
+                  {{ timeDeleted(archive.deleted_at) }}
+                </p>
+                <p class="text-xs mt-1">{{ shortenText(archive.body) }}</p>
               </div>
             </div>
+            <div class="flex gap-2">
+              <button @click.prevent="toggleDelete(archive.id)">
+                <trash-icon class="w-5 h-5 text-red-500"></trash-icon>
+              </button>
+              <button @click.prevent="restore(archive)">
+                <refresh-icon class="w-5 h-5 text-green-500"></refresh-icon>
+              </button>
+            </div>
           </div>
-          <div
-            v-else
-            class="flex items-center my-4 w-full justify-center gap-2"
-          >
-            <information-circle-icon
-              class="h-5 w-5 text-green-500"
-            ></information-circle-icon>
-            <h1 class="text-xs font-medium">Empty Trash</h1>
-          </div>
+        </div>
+        <div v-else class="flex items-center my-4 w-full justify-center gap-2">
+          <information-circle-icon
+            class="h-5 w-5 text-green-500"
+          ></information-circle-icon>
+          <h1 class="text-xs font-medium">Empty Archive Post</h1>
         </div>
         <div class="flex justify-end">
           <button
@@ -135,7 +104,7 @@
     <div>
       <p class="text-xs">This action cannot be undo!</p>
       <p class="text-xs">
-        Are you sure you want to permanent delete this admin ?
+        Are you sure you want to permanent delete this post ?
       </p>
     </div>
     <!--footer-->
@@ -167,7 +136,7 @@
         No
       </button>
       <button
-        @click.prevent="deletePermanent()"
+        @click.prevent="permanentDelete()"
         class="
           text-green-500
           background-transparent
@@ -194,53 +163,66 @@
 
 <script>
 import {
+  ArchiveIcon,
   TrashIcon,
+  ExclamationIcon,
   RefreshIcon,
   InformationCircleIcon,
-  ExclamationIcon,
 } from "@heroicons/vue/solid";
 import AdminModal from "@/components/AdminModal.vue";
-import { mapGetters, mapActions } from "vuex";
-
+import { mapActions, mapGetters } from "vuex";
+import timeAgo from "@/includes/timeAgo";
 export default {
   components: {
-    TrashIcon,
+    ArchiveIcon,
     AdminModal,
+    ExclamationIcon,
+    TrashIcon,
     RefreshIcon,
     InformationCircleIcon,
-    ExclamationIcon,
-  },
-  name: "TrashModal",
-  async created() {
-    await this.getAdminTrash();
   },
   data() {
     return {
       isShow: false,
       isWarning: false,
-      adminId: null,
+      postId: null,
     };
   },
-  computed: {
-    ...mapGetters(["adminTrash"]),
+  async created() {
+    await this.getArchivePosts();
+    console.log(this.archivePosts);
   },
   methods: {
-    ...mapActions(["getAdminTrash", "restoreAdmin", "deleteAdmin"]),
+    ...mapActions(["getArchivePosts", "deletePost", "restorePost"]),
+    permanentDelete() {
+      this.isWarning = false;
+      this.deletePost(this.postId);
+    },
     toggleModal() {
       this.isShow = !this.isShow;
     },
-    restore(admin) {
-      this.restoreAdmin(admin);
-    },
     toggleDelete(id) {
-      this.isWarning = true;
-      this.adminId = id;
-      // this.deleteAdmin(id);
+      this.isWarning = !this.isWarning;
+      this.postId = id;
     },
-    deletePermanent() {
-      this.deleteAdmin(this.adminId);
-      this.isWarning = false;
+    timeDeleted(date) {
+      // Create formatter (English).
+      var temp = new Date(date);
+      return timeAgo.format(temp, "round");
     },
+    shortenText(text) {
+      if (text.length > 100) {
+        return text.substring(0, 100) + "...";
+      } else {
+        return text;
+      }
+    },
+    restore(post) {
+      this.restorePost(post);
+    },
+  },
+  computed: {
+    ...mapGetters(["archivePosts"]),
   },
 };
 </script>

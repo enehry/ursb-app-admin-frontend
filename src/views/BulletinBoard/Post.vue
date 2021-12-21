@@ -109,7 +109,7 @@
                 Edit
               </button>
               <button
-                href="#"
+                @click.prevent="toArchivePost(post)"
                 class="
                   flex
                   gap-2
@@ -126,7 +126,7 @@
                 Archive
               </button>
               <button
-                href="#"
+                @click.prevent="isWarning = true"
                 class="
                   flex
                   gap-2
@@ -148,20 +148,11 @@
         <div class="border-b border-gray-100"></div>
         <div
           v-if="post.images.length > 0"
-          class="
-            text-gray-400
-            font-medium
-            text-sm
-            mb-7
-            mt-6
-            mx-3
-            px-2
-            object-cover
-          "
+          class="text-gray-400 font-medium text-sm mt-2 mx-3 px-2 object-cover"
         >
           <img class="rounded" :src="$baseURL + post.images[0].image_url" />
         </div>
-        <div class="text-gray-600 font-semibold text-lg mb-2 mx-3 px-2">
+        <div class="text-gray-600 font-semibold text-lg mb-2 mt-5 mx-3 px-2">
           {{ post.title }}
         </div>
         <div class="text-gray-500 font-light text-sm mb-6 mx-3 px-2">
@@ -258,6 +249,69 @@
       </div>
     </div>
   </div>
+  <admin-modal :showModal="isWarning">
+    <div class="heading flex items-center gap-2">
+      <exclamation-icon class="w-5 h-5 text-red-500"></exclamation-icon>
+      <h1 class="uppercase text-red-500 font-semibold text-sm">Warning !</h1>
+    </div>
+    <div>
+      <p class="text-xs">This action cannot be undo!</p>
+      <p class="text-xs">
+        Are you sure you want to permanent delete this post ?
+      </p>
+    </div>
+    <!--footer-->
+    <div class="flex items-center justify-end mt-4">
+      <button
+        class="
+          text-red-500
+          bg-transparent
+          border border-solid border-red-500
+          hover:bg-red-500 hover:text-white
+          active:bg-red-600
+          font-bold
+          uppercase
+          text-xs
+          px-4
+          py-2
+          rounded
+          outline-none
+          focus:outline-none
+          mr-1
+          mb-1
+          ease-linear
+          transition-all
+          duration-150
+        "
+        type="button"
+        v-on:click="isWarning = false"
+      >
+        No
+      </button>
+      <button
+        @click.prevent="permanentDelete()"
+        class="
+          text-green-500
+          background-transparent
+          font-bold
+          uppercase
+          px-4
+          py-2
+          text-xs
+          outline-none
+          focus:outline-none
+          mr-1
+          mb-1
+          ease-linear
+          transition-all
+          duration-150
+        "
+        type="submit"
+      >
+        Yes
+      </button>
+    </div>
+  </admin-modal>
 </template>
 
 <script>
@@ -267,9 +321,12 @@ import {
   TrashIcon,
   ArchiveIcon,
   HeartIcon,
+  ExclamationIcon,
 } from "@heroicons/vue/solid";
 
 import timeAgo from "../../includes/timeAgo";
+import { mapActions } from "vuex";
+import AdminModal from "@/components/AdminModal.vue";
 
 export default {
   components: {
@@ -278,6 +335,8 @@ export default {
     TrashIcon,
     ArchiveIcon,
     HeartIcon,
+    ExclamationIcon,
+    AdminModal,
   },
   created() {},
   props: {
@@ -286,10 +345,13 @@ export default {
   data() {
     return {
       isMenuShow: false,
+      isWarning: false,
+      postId: null,
     };
   },
   computed: {},
   methods: {
+    ...mapActions(["toArchivePost", "deletePost"]),
     showMenu() {
       this.isMenuShow = !this.isMenuShow;
       console.log("click");
@@ -298,6 +360,10 @@ export default {
       // Create formatter (English).
       var temp = new Date(date);
       return timeAgo.format(temp, "round");
+    },
+    permanentDelete() {
+      this.deletePost(this.post.id);
+      this.isWarning = false;
     },
   },
 };

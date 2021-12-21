@@ -6,18 +6,7 @@
     :close-on-click="true"
   >
     <template #body="{ item }">
-      <div
-        class="
-          w-full
-          flex flex-col
-          m-2
-          p-4
-          bg-white
-          shadow-md
-          hover:shodow-lg
-          rounded-lg
-        "
-      >
+      <div class="w-full flex flex-col m-2 p-4 bg-white shadow-md rounded-lg">
         <div class="flex items-center justify-between">
           <div class="flex items-center">
             <trash-icon
@@ -33,7 +22,9 @@
               class="w-5 h-5 text-green-500"
             ></check-circle-icon>
             <div class="flex flex-col ml-3">
-              <div class="font-medium text-xs">{{ item.title }}</div>
+              <div class="font-bold text-sm text-gray-700">
+                {{ item.title }}
+              </div>
               <p
                 v-if="item.data.message"
                 class="text-xs text-gray-600 leading-none mt-1"
