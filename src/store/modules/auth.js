@@ -29,22 +29,25 @@ const actions = {
     try {
       await http.get("/sanctum/csrf-cookie");
       const res = await http.post("api/admin/login", values);
-      console.log(res);
+
       commit("setToken", res.data.token);
       const user = await http.get("api/admin/me");
       commit("setUserData", user.data);
       router.push({ name: "Home" });
     } catch (ex) {
-      if (ex.response.status == 422) {
-        console.log(ex.response.data);
-        commit("setErrors", ex.response.data.errors);
-        notify({
-          group: "auth",
-          title: "Authentication Error",
-          text: ex.response.data.errors,
-          type: "error",
-        });
+      if (ex.response.status) {
+        if (ex.response.status == 422) {
+          console.log(ex.response.data);
+          commit("setErrors", ex.response.data.errors);
+          notify({
+            group: "auth",
+            title: "Authentication Error",
+            text: ex.response.data.errors,
+            type: "error",
+          });
+        }
       }
+      console.log(ex);
     }
 
     commit("setLoading", false);

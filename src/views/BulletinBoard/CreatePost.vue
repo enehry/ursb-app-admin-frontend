@@ -209,7 +209,7 @@ export default {
       await this.createNewPost(formData);
       this.$refs.postForm.resetForm();
       this.isLoading = false;
-      console.log(value);
+      console.log(formData.get("courses"));
     },
   },
 };

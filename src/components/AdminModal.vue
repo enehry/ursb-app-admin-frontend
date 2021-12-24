@@ -21,7 +21,7 @@
         flex
       "
     >
-      <div class="relative w-auto my-6 mx-auto max-w-3xl">
+      <div class="relative my-6 mx-auto w-screen max-w-xl">
         <!--content-->
         <div class="bg-white p-5 rounded-md shadow-lg">
           <slot></slot>

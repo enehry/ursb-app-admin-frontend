@@ -6,11 +6,13 @@ const state = {
   updateUserData: null,
   changeOwnPasswordError: null,
   browserSessions: [],
+  minGradeQpa: null,
 };
 const getters = {
   updateUserData: (state) => state.updateUserData,
   changeOwnPasswordError: (state) => state.changeOwnPasswordError,
   browserSessions: (state) => state.browserSessions,
+  minGradeQpa: (state) => state.minGradeQpa,
 };
 const mutations = {
   setUpdateUserData(state, user) {
@@ -22,8 +24,37 @@ const mutations = {
   setBrowserSessions(state, sessions) {
     state.browserSessions = sessions;
   },
+  setMinGradeQpa(state, gradeQpa) {
+    state.minGradeQpa = gradeQpa;
+  },
 };
 const actions = {
+  async getMinGradeQpa({ commit }) {
+    try {
+      const res = await http.get("/api/admin/min-grade-qpa");
+      commit("setMinGradeQpa", res.data);
+    } catch (ex) {
+      console.log(ex);
+    }
+  },
+  async saveMinGradeQpa({ commit }, gradeQpa) {
+    try {
+      const res = await http.post("/api/admin/min-grade-qpa", gradeQpa);
+      commit("setMinGradeQpa", res.data.data);
+
+      notify({
+        group: "no_button",
+        title: "Success",
+        max: 1,
+        data: {
+          type: "success",
+          message: res.data.message,
+        },
+      });
+    } catch (ex) {
+      console.log(ex.response);
+    }
+  },
   async logoutAllBrowserSessions({ commit }) {
     try {
       const res = await http.get("api/admin/browser-sessions/logout/all");

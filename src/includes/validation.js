@@ -15,6 +15,8 @@ import {
   max_value as maxValue,
   confirmed,
   mimes,
+  numeric,
+  digits,
 } from "@vee-validate/rules";
 
 export default {
@@ -33,29 +35,43 @@ export default {
     defineRule("max_value", maxValue);
     defineRule("password_mismatch", confirmed);
     defineRule("mimes", mimes);
+    defineRule("numeric", numeric);
+    defineRule("digits", digits);
 
     configure({
       generateMessage: (context) => {
         const messages = {
-          required: `The ${context.field} is required.`,
-          min: `The field ${context.field} is too short.`,
-          max: `The field ${context.field} is too long.`,
-          alpha_spaces: `The ${context.field} may only contain alphabet character.`,
-          min_value: `The ${context.field} is too low.`,
-          max_value: `The ${context.field} is too high.`,
+          required: `The ${repStr(context.field)} is required.`,
+          min: `The field ${repStr(context.field)} is too short.`,
+          max: `The field ${repStr(context.field)} is too long.`,
+          alpha_spaces: `The ${repStr(
+            context.field
+          )} may only contain alphabet character.`,
+          min_value: `The ${repStr(context.field)} is too low.`,
+          max_value: `The ${repStr(context.field)} is too high.`,
           password_mismatch: "The passwords don't match",
           tos: "You must accept the Terms of Service",
+          numeric: `The ${repStr(
+            context.field
+          )} may only contain numeric characters.`,
+          digits: `The ${repStr(
+            context.field
+          )} may only contain integer characters.`,
         };
+
+        function repStr(str) {
+          return str.replace(/_/g, " ").trim();
+        }
 
         const message = messages[context.rule.name]
           ? messages[context.rule.name]
-          : `The field ${context.field} is invalid`;
+          : `The field ${repStr(context.field)} is invalid`;
 
         return message;
       },
       validateOnBlur: true,
       validateOnChange: true,
-      validateOnInput: false,
+      validateOnInput: true,
       validateOnModelUpdate: true,
     });
   },

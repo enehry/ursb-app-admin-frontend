@@ -51,7 +51,10 @@
             </div>
           </div>
           <div class=""></div>
-          <div class="relative ml-auto">
+          <div
+            v-if="userData.id === post.posted_by.id"
+            class="relative ml-auto"
+          >
             <button
               @click="showMenu"
               class="
@@ -89,25 +92,7 @@
                 z-20
               "
             >
-              <button
-                href="#"
-                class="
-                  flex
-                  gap-2
-                  px-4
-                  py-2
-                  text-xs
-                  capitalize
-                  text-gray-500
-                  w-full
-                  hover:bg-green-500 hover:text-white
-                "
-              >
-                <pencil-alt-icon
-                  class="w-4 h-4 hover:text-white"
-                ></pencil-alt-icon>
-                Edit
-              </button>
+              <edit-post :post="post" :courses="coursesForPosting"></edit-post>
               <button
                 @click.prevent="toArchivePost(post)"
                 class="
@@ -150,7 +135,10 @@
           v-if="post.images.length > 0"
           class="text-gray-400 font-medium text-sm mt-2 mx-3 px-2 object-cover"
         >
-          <img class="rounded" :src="$baseURL + post.images[0].image_url" />
+          <img
+            class="rounded w-full max-h-screen object-cover"
+            :src="$baseURL + post.images[0].image_url"
+          />
         </div>
         <div class="text-gray-600 font-semibold text-lg mb-2 mt-5 mx-3 px-2">
           {{ post.title }}
@@ -317,7 +305,6 @@
 <script>
 import {
   DotsVerticalIcon,
-  PencilAltIcon,
   TrashIcon,
   ArchiveIcon,
   HeartIcon,
@@ -325,18 +312,19 @@ import {
 } from "@heroicons/vue/solid";
 
 import timeAgo from "../../includes/timeAgo";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import AdminModal from "@/components/AdminModal.vue";
+import EditPost from "./EditPost.vue";
 
 export default {
   components: {
     DotsVerticalIcon,
-    PencilAltIcon,
     TrashIcon,
     ArchiveIcon,
     HeartIcon,
     ExclamationIcon,
     AdminModal,
+    EditPost,
   },
   created() {},
   props: {
@@ -349,7 +337,9 @@ export default {
       postId: null,
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["userData", "coursesForPosting"]),
+  },
   methods: {
     ...mapActions(["toArchivePost", "deletePost"]),
     showMenu() {

@@ -32,10 +32,12 @@ http.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (error.response.status === 401) {
-      router.push("/login");
-      ls.removeAll();
-      return Promise.reject(error);
+    if (error.response) {
+      if (error.response.status === 401) {
+        router.push("/login");
+        ls.removeAll();
+        return Promise.reject(error);
+      }
     }
 
     return Promise.reject(error);

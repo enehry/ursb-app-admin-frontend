@@ -116,6 +116,27 @@ const actions = {
       return "error";
     }
   },
+  async updatePost({ commit }, post) {
+    try {
+      const res = await http.post(
+        `api/admin/post-edit/${post.get("id")}`,
+        post
+      );
+      commit("updatePost", res.data.post);
+      notify({
+        group: "no_button",
+        title: "Success",
+        max: 1,
+        data: {
+          type: "success",
+          message: res.data.message,
+        },
+      });
+    } catch (ex) {
+      console.log(ex.response);
+      return "error";
+    }
+  },
   async createNewPost({ commit }, data) {
     try {
       const res = await http.post("api/admin/post", data);
@@ -165,6 +186,10 @@ const mutations = {
       (item) => item.id !== post.id
     );
     state.posts.unshift(post);
+  },
+  updatePost(state, post) {
+    const i = state.posts.map((item) => item.id).indexOf(post.id);
+    state.posts.splice(i, 1, post);
   },
 };
 
